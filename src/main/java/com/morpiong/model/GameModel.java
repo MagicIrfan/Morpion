@@ -11,13 +11,11 @@ public class GameModel {
     private final Case[][] cases;
     private final IntegerProperty nbMoves;
     private final BooleanProperty gameFinished;
-
     public GameModel(Case[][] cases){
         this.cases = cases;
         this.nbMoves = new SimpleIntegerProperty(0);
         this.gameFinished = new SimpleBooleanProperty(false);
     }
-
     public IntegerProperty nbMovesProperty(){
         return this.nbMoves;
     }
@@ -28,52 +26,100 @@ public class GameModel {
     public void addTurn() {
         this.nbMoves.set(getNbMoves()+1);
     }
-
     public BooleanProperty gameFinishedProperty(){
         return this.gameFinished;
     }
-
     public Case[][] getCases(){
         return this.cases;
     }
-
     public boolean isWin() {
-        // Vérifier les lignes
+        return checkRowsForWin() || checkColumnsForWin() || checkDiagonalsForWin();
+    }
+
+    private boolean checkRowsForWin() {
         for (int i = 0; i < 3; i++) {
-            if (((!this.cases[i][0].isPair() && !this.cases[i][1].isPair() && !this.cases[i][2].isPair())
-            || (this.cases[i][0].isPair() && this.cases[i][1].isPair() && this.cases[i][2].isPair()))
-                    && this.cases[i][0].isSelectionned() && this.cases[i][1].isSelectionned()
-                    && this.cases[i][2].isSelectionned()) {
+            boolean allPair = true;
+            boolean allUnpair = true;
+            boolean allSelected = true;
+
+            for (int j = 0; j < 3; j++) {
+                if (!this.cases[i][j].isSelectionned()) {
+                    allSelected = false;
+                }
+                if (this.cases[i][j].isPair()) {
+                    allUnpair = false;
+                } else {
+                    allPair = false;
+                }
+            }
+
+            if ((allPair || allUnpair) && allSelected) {
                 return true;
             }
         }
-
-        // Vérifier les colonnes
-        for (int i = 0; i < 3; i++) {
-            if (((this.cases[0][i].isPair() && this.cases[1][i].isPair() && this.cases[2][i].isPair())
-                || (!this.cases[0][i].isPair() && !this.cases[1][i].isPair() && !this.cases[2][i].isPair()))
-                    && this.cases[0][i].isSelectionned() && this.cases[1][i].isSelectionned()
-                    && this.cases[2][i].isSelectionned()) {
-                return true;
-            }
-        }
-
-        // Vérifier les diagonales
-        if (((this.cases[0][0].isPair() && this.cases[1][1].isPair() && this.cases[2][2].isPair())
-         || (!this.cases[0][0].isPair() && !this.cases[1][1].isPair() && !this.cases[2][2].isPair()))
-                && this.cases[0][0].isSelectionned() && this.cases[1][1].isSelectionned()
-                && this.cases[2][2].isSelectionned()) {
-            return true;
-        }
-
-        if (((!this.cases[0][2].isPair() && !this.cases[1][1].isPair() && !this.cases[2][0].isPair())
-        || (this.cases[0][2].isPair() && this.cases[1][1].isPair() && this.cases[2][0].isPair()))
-                && this.cases[0][2].isSelectionned() && this.cases[1][1].isSelectionned()
-                && this.cases[2][0].isSelectionned()) {
-            return true;
-        }
-
         return false;
+    }
+
+    private boolean checkColumnsForWin() {
+        for (int i = 0; i < 3; i++) {
+            boolean allPair = true;
+            boolean allUnpair = true;
+            boolean allSelected = true;
+
+            for (int j = 0; j < 3; j++) {
+                if (!this.cases[j][i].isSelectionned()) {
+                    allSelected = false;
+                }
+                if (this.cases[j][i].isPair()) {
+                    allUnpair = false;
+                } else {
+                    allPair = false;
+                }
+            }
+
+            if ((allPair || allUnpair) && allSelected) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean checkDiagonalsForWin() {
+        boolean allPair = true;
+        boolean allUnpair = true;
+        boolean allSelected = true;
+
+        for (int i = 0; i < 3; i++) {
+            if (!this.cases[i][i].isSelectionned()) {
+                allSelected = false;
+            }
+            if (this.cases[i][i].isPair()) {
+                allUnpair = false;
+            } else {
+                allPair = false;
+            }
+        }
+
+        if ((allPair || allUnpair) && allSelected) {
+            return true;
+        }
+
+        allPair = true;
+        allUnpair = true;
+        allSelected = true;
+
+        for (int i = 0; i < 3; i++) {
+            if (!this.cases[i][2 - i].isSelectionned()) {
+                allSelected = false;
+            }
+            if (this.cases[i][2 - i].isPair()) {
+                allUnpair = false;
+            } else {
+                allPair = false;
+            }
+        }
+
+        return (allPair || allUnpair) && allSelected;
     }
 
     public boolean isDraw(){
@@ -82,8 +128,11 @@ public class GameModel {
             for (Case simpleCase : rowCase) {
                 if(!simpleCase.isSelectionned()){
                     allSelectionned = false;
+                    break;
                 }
             }
+            if(!allSelectionned)
+                break;
         }
         return allSelectionned && !isWin();
     }

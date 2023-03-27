@@ -2,22 +2,19 @@ package com.morpiong.controller;
 
 import com.morpiong.model.GameModel;
 import com.morpiong.model.Plate;
+import com.morpiong.model.visitor.CaseVisitor;
+import com.morpiong.model.visitor.DrawVisitor;
 import com.morpiong.utils.SceneChangerUtils;
 import com.morpiong.model.AlertBuilder;
 import com.morpiong.model.Case;
-import com.morpiong.view.CasePane;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.Objects;
 
 public class GameController {
     public Pane gamePane;
@@ -36,7 +33,6 @@ public class GameController {
         Case[][] cases = this.model.getCases();
         for(Case[] rowCase: cases){
             for(Case simpleCase : rowCase){
-                simpleCase.setPair(this.model.getNbMoves()%2==0);
                 simpleCase.getPane().setOnMouseClicked((MouseEvent event) ->{
                     if(!simpleCase.selectionnedProperty().get()){
                         simpleCase.accept(new CaseVisitor(simpleCase.getPane()));
@@ -46,7 +42,7 @@ public class GameController {
                 simpleCase.selectionnedProperty().addListener((observable, oldValue, newValue) -> {
                     if(newValue){
                         simpleCase.setPair(this.model.getNbMoves()%2==0);
-                        ((CasePane)simpleCase.getPane()).setImage(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(this.model.getNbMoves() % 2 == 0 ? "com/morpiong/images/O.png" : "com/morpiong/images/X.png")));
+                        simpleCase.accept(new DrawVisitor(simpleCase.getPane()));
                         this.model.checkFinishedGame();
                     }
                 });

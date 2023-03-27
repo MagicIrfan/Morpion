@@ -12,7 +12,7 @@ import java.io.InputStream;
 
 public class CasePane extends Pane {
 
-    ImageView image;
+    private final ImageView image;
     public CasePane(){
         this.image = new ImageView();
         this.image.setFitWidth(200);

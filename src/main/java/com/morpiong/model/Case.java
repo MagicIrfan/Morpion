@@ -1,6 +1,5 @@
 package com.morpiong.model;
-import com.morpiong.controller.CaseVisitor;
-import com.morpiong.view.CasePane;
+import com.morpiong.model.visitor.Visitor;
 import javafx.beans.property.*;
 import javafx.scene.layout.Pane;
 
@@ -24,7 +23,7 @@ public class Case {
         return this.casePane;
     }
 
-    public void accept(CaseVisitor visitor){
+    public void accept(Visitor visitor){
         visitor.visit(this);
     }
 
