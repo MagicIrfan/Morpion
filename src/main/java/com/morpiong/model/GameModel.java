@@ -7,19 +7,26 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
 public class GameModel {
-
     private final Case[][] cases;
     private final IntegerProperty nbMoves;
     private final BooleanProperty gameFinished;
+    private final IntegerProperty playerTurn;
     public GameModel(Case[][] cases){
         this.cases = cases;
-        this.nbMoves = new SimpleIntegerProperty(0);
+        this.playerTurn = new SimpleIntegerProperty(1);
+        this.nbMoves = new SimpleIntegerProperty(1);
         this.gameFinished = new SimpleBooleanProperty(false);
+    }
+
+    public IntegerProperty playerTurnProperty(){
+        return this.playerTurn;
+    }
+    public void setPlayerTurn(int turn){
+        this.playerTurn.set(turn);
     }
     public IntegerProperty nbMovesProperty(){
         return this.nbMoves;
     }
-
     public int getNbMoves(){
         return this.nbMoves.get();
     }

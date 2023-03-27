@@ -20,7 +20,8 @@ public class MainMenuController {
     public Button quitButton;
     @FXML
     public Label titleLabel;
-
+    @FXML
+    public Button playBotButton;
     @FXML
     public void onPlayButton(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/morpiong/game-view.fxml"));
@@ -35,5 +36,8 @@ public class MainMenuController {
         Node source = (Node) actionEvent.getSource();
         Stage stage = (Stage) source.getScene().getWindow();
         stage.close();
+    }
+    @FXML
+    public void onPlayBotButton(ActionEvent actionEvent) {
     }
 }

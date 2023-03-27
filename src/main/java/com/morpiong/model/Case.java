@@ -8,7 +8,6 @@ public class Case {
     private final Pane casePane;
     private final BooleanProperty selectionned;
     private boolean isPair;
-
     public Case(Pane pane){
         this.casePane = pane;
         this.selectionned = new SimpleBooleanProperty(false);
@@ -22,15 +21,12 @@ public class Case {
     public Pane getPane(){
         return this.casePane;
     }
-
     public void accept(Visitor visitor){
         visitor.visit(this);
     }
-
     public void setPair(boolean isPair){
         this.isPair = isPair;
     }
-
     public boolean isPair(){
         return this.isPair;
     }
