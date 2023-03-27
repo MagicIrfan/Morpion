@@ -52,7 +52,6 @@ public class GameController {
         // Afficher un message de fin de jeu si la partie est terminée
         this.model.gameFinishedProperty().addListener((observable, oldValue, newValue) -> {
             if(newValue){
-                System.out.println("fesse");
                 String message = "";
                 if(this.model.isWin()){
                     message = "Bravo, joueur " + (this.model.getNbMoves() % 2 == 0 ? "2" : "1") + " a gagné !";
