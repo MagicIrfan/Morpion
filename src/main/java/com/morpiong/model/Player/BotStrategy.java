@@ -1,15 +1,27 @@
 package com.morpiong.model.Player;
 
 import com.morpiong.model.Case;
-import com.morpiong.model.visitor.CaseVisitor;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import com.morpiong.model.visitor.SelectVisitor;
 
+/**
+ * Une stratégie de jeu implémentant un joueur bot qui choisit aléatoirement une case non sélectionnée.
+ */
 public class BotStrategy extends PlayableStrategy {
 
+    /**
+     * Crée une nouvelle instance de {@code BotStrategy} avec l'image de forme spécifiée.
+     *
+     * @param urlImageShape l'URL de l'image de forme à utiliser
+     */
     public BotStrategy(String urlImageShape){
         super(urlImageShape);
     }
+
+    /**
+     * Choisit une case aléatoire non sélectionnée parmi toutes les cases fournies et la sélectionne.
+     *
+     * @param cases la matrice des cases
+     */
     @Override
     public void chooseCase(Case[][] cases) {
         Case caseToChoose = null;
@@ -25,6 +37,6 @@ public class BotStrategy extends PlayableStrategy {
                 simpleCase.getPane().setOnMouseClicked(null);
             }
         }
-        caseToChoose.accept(new CaseVisitor());
+        caseToChoose.accept(new SelectVisitor());
     }
 }

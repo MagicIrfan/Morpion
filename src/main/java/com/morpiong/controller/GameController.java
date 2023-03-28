@@ -23,7 +23,10 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Objects;
 
-public class GameController{
+/**
+ * Contrôleur de la vue principale du jeu de morpion.
+ */
+public class GameController {
     @FXML
     public Pane gamePane;
     @FXML
@@ -35,7 +38,10 @@ public class GameController{
     private GameModel model;
     private boolean isPlayingWithBot;
 
-    public void initialize(){
+    /**
+     * Initialise la vue principale du jeu.
+     */
+    public void initialize() {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/morpiong/plate-view.fxml"));
         Parent root = null;
         try {
@@ -52,13 +58,22 @@ public class GameController{
         this.createBindings();
     }
 
-    public void setPlayingWithBot(boolean isBot){
+    /**
+     * Définit si le joueur joue contre un bot.
+     *
+     * @param isBot vrai si le joueur joue contre un bot, faux sinon.
+     */
+    public void setPlayingWithBot(boolean isBot) {
         this.isPlayingWithBot = isBot;
     }
-    private void createBindings(){
+
+    /**
+     * Crée les bindings pour les cases du plateau de jeu.
+     */
+    private void createBindings() {
         Case[][] cases = this.model.getCases();
-        for(Case[] rowCase: cases){
-            for(Case simpleCase : rowCase){
+        for (Case[] rowCase : cases) {
+            for (Case simpleCase : rowCase) {
                 simpleCase.selectionnedProperty().addListener((observable, oldValue, newValue) -> {
                     if (newValue) {
                         this.model.onTurnFinished(simpleCase);
@@ -70,7 +85,7 @@ public class GameController{
         }
         // Afficher un message de fin de jeu si la partie est terminée
         this.model.gameFinishedProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue){
+            if (newValue) {
                 this.model.onGameFinished(gamePane);
             }
         });
