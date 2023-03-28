@@ -1,4 +1,4 @@
-module com.morpiong.morpiong {
+module com.morpiong {
     requires javafx.controls;
     requires javafx.fxml;
 
