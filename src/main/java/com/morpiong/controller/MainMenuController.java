@@ -26,6 +26,9 @@ public class MainMenuController {
     public void onPlayButton(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/morpiong/game-view.fxml"));
         Parent root = loader.load();
+        GameController controller = new GameController(); // Créez une nouvelle instance du contrôleur en passant true comme paramètre
+        controller.setIsBot(false);
+        loader.setControllerFactory(c -> controller);
         Scene mainMenuScene = new Scene(root);
         Stage primaryStage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         primaryStage.setScene(mainMenuScene);
@@ -38,6 +41,15 @@ public class MainMenuController {
         stage.close();
     }
     @FXML
-    public void onPlayBotButton(ActionEvent actionEvent) {
+    public void onPlayBotButton(ActionEvent actionEvent) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/morpiong/game-view.fxml"));
+        Parent root = loader.load();
+        GameController controller = new GameController(); // Créez une nouvelle instance du contrôleur en passant true comme paramètre
+        controller.setIsBot(true);
+        loader.setControllerFactory(c -> controller);
+        Scene mainMenuScene = new Scene(root);
+        Stage primaryStage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        primaryStage.setScene(mainMenuScene);
+        primaryStage.show();
     }
 }

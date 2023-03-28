@@ -1,6 +1,6 @@
 package com.morpiong.model;
 
-import com.morpiong.model.Case;
+import com.morpiong.model.Player.PlayableStrategy;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -11,10 +11,12 @@ public class GameModel {
     private final IntegerProperty nbMoves;
     private final BooleanProperty gameFinished;
     private final IntegerProperty playerTurn;
+    private PlayableStrategy player;
+    private PlayableStrategy opponent;
     public GameModel(Case[][] cases){
         this.cases = cases;
         this.playerTurn = new SimpleIntegerProperty(1);
-        this.nbMoves = new SimpleIntegerProperty(1);
+        this.nbMoves = new SimpleIntegerProperty(0);
         this.gameFinished = new SimpleBooleanProperty(false);
     }
 
@@ -142,6 +144,22 @@ public class GameModel {
                 break;
         }
         return allSelectionned && !isWin();
+    }
+
+    public void setPlayerStrategy(PlayableStrategy playableStrategy){
+        this.player = playableStrategy;
+    }
+
+    public void setOpponentStrategy(PlayableStrategy playableStrategy){
+        this.opponent = playableStrategy;
+    }
+
+    public PlayableStrategy getPlayer(){
+        return this.player;
+    }
+
+    public PlayableStrategy getOpponent(){
+        return this.opponent;
     }
 
     public void checkFinishedGame(){
