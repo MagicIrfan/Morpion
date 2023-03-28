@@ -36,6 +36,17 @@ Le jeu permet :
 * De jouer à deux joueurs sur le même ordinateur
 * De jouer contre un bot qui utilise une stratégie simple pour choisir ses coups
 
+# Images
+
+### Menu principal
+![Menu principal](/readmeImages/menu.png)
+
+### Jeu en cours
+![Jeu en cours](/readmeImages/encours.png)
+
+### Fin du jeu
+![Victoire](/readmeImages/victoire.png)
+
 # Auteur
 
 Ce projet a été réalisé par moi-même. N'hésitez pas à me contacter pour toute question ou suggestion d'amélioration.
