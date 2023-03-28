@@ -1,10 +1,20 @@
 package com.morpiong.model;
 
 import com.morpiong.model.Player.PlayableStrategy;
+import com.morpiong.model.builder.AlertBuilder;
+import com.morpiong.model.visitor.DrawVisitor;
+import com.morpiong.utils.SceneChangerUtils;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.scene.control.Alert;
+import javafx.scene.image.Image;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.util.Objects;
 
 public class GameModel {
     private final Case[][] cases;
@@ -143,6 +153,48 @@ public class GameModel {
                 break;
         }
         return allSelectionned && !isWin();
+    }
+
+    public void onGameFinished(Pane gamePane){
+        String message = "";
+        if(this.isWin()){
+            message = "Bravo, joueur " + this.playerTurnProperty().get() + " a gagné !";
+        } else if(this.isDraw()) {
+            message = "Match nul.";
+        }
+        Alert alert = new AlertBuilder()
+                .setTitle("Fin de partie")
+                .setContentText(message)
+                .setType(Alert.AlertType.INFORMATION)
+                .addStyleSheet("/com/morpiong/styles/buttons.css")
+                .setOnCloseRequest(e -> {
+                    Stage stage = (Stage) ((Alert) e.getSource()).getDialogPane().getScene().getWindow();
+                    stage.close();
+                    try {
+                        SceneChangerUtils.changeScene(gamePane,"/com/morpiong/mainmenu-view.fxml");
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                })
+                .build();
+        alert.showAndWait();
+    }
+
+    public void onTurnFinished(Case simpleCase){
+        // Définir la paire pour le joueur en cours
+        simpleCase.setPair(this.getNbMoves() % 2 == 0);
+        // Afficher le coup sur le plateau
+        simpleCase.accept(new DrawVisitor(this.getActivePlayer().getUrlShape()));
+        // Vérifier si la partie est terminée
+        this.checkFinishedGame();
+    }
+
+    public void onBeginTurn(){
+        this.addTurn();
+        // Changer le tour de joueur
+        this.setPlayerTurn(this.getNbMoves() % 2 == 0 ? 1 : 2);
+        // Si l'option "bot" est activée, faire jouer le bot
+        this.getActivePlayer().chooseCase(cases);
     }
 
     public void setPlayerStrategy(PlayableStrategy playableStrategy){

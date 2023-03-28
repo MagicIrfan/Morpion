@@ -22,7 +22,6 @@ public class Plate {
             }
         }
     }
-
     public Case[][] getCases(){
         return this.cases;
     }

@@ -29,13 +29,7 @@ public class MainMenuController {
 
     @FXML
     public void onPlayButton(ActionEvent actionEvent) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/morpiong/game-view.fxml"));
-        Parent root = loader.load();
-        GameController controller = loader.getController();
-        Scene mainMenuScene = new Scene(root);
-        Stage primaryStage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-        primaryStage.setScene(mainMenuScene);
-        primaryStage.show();
+        this.play(actionEvent,false);
     }
     @FXML
     public void onQuitButton(ActionEvent actionEvent) {
@@ -45,9 +39,15 @@ public class MainMenuController {
     }
     @FXML
     public void onPlayBotButton(ActionEvent actionEvent) throws IOException {
+        this.play(actionEvent,true);
+    }
+
+    private void play(ActionEvent actionEvent, boolean isPlayingWithBot) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/morpiong/game-view.fxml"));
         Parent root = loader.load();
         GameController controller = loader.getController();
+        controller.setPlayingWithBot(isPlayingWithBot);
+        controller.initialize();
         Scene mainMenuScene = new Scene(root);
         Stage primaryStage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         primaryStage.setScene(mainMenuScene);

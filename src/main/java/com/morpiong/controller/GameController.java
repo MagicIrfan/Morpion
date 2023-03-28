@@ -33,7 +33,7 @@ public class GameController{
     @FXML
     public ImageView playerShape;
     private GameModel model;
-    private boolean isBot;
+    private boolean isPlayingWithBot;
 
     public void initialize(){
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/morpiong/plate-view.fxml"));
@@ -47,14 +47,13 @@ public class GameController{
         platePane.getChildren().add(root);
         this.model = new GameModel(plate.getCases());
         this.model.setPlayerStrategy(new PlayerStrategy(ImageUtils.O));
-        System.out.println(isBot);
-        this.model.setOpponentStrategy(isBot ? new BotStrategy(ImageUtils.X) : new PlayerStrategy(ImageUtils.X));
+        this.model.setOpponentStrategy(isPlayingWithBot ? new BotStrategy(ImageUtils.X) : new PlayerStrategy(ImageUtils.X));
         this.playerShape.setImage(new Image(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(this.model.getPlayer().getUrlShape()))));
         this.createBindings();
     }
 
-    public void setIsBot(boolean isBot){
-        this.isBot = isBot;
+    public void setPlayingWithBot(boolean isBot){
+        this.isPlayingWithBot = isBot;
     }
     private void createBindings(){
         Case[][] cases = this.model.getCases();
@@ -62,17 +61,8 @@ public class GameController{
             for(Case simpleCase : rowCase){
                 simpleCase.selectionnedProperty().addListener((observable, oldValue, newValue) -> {
                     if (newValue) {
-                        // Définir la paire pour le joueur en cours
-                        simpleCase.setPair(this.model.getNbMoves() % 2 == 0);
-                        // Afficher le coup sur le plateau
-                        simpleCase.accept(new DrawVisitor(this.model.getActivePlayer().getUrlShape()));
-                        // Vérifier si la partie est terminée
-                        this.model.checkFinishedGame();
-                        this.model.addTurn();
-                        // Changer le tour de joueur
-                        this.model.setPlayerTurn(this.model.getNbMoves() % 2 == 0 ? 1 : 2);
-                        // Si l'option "bot" est activée, faire jouer le bot
-                        this.model.getActivePlayer().chooseCase(cases);
+                        this.model.onTurnFinished(simpleCase);
+                        this.model.onBeginTurn();
                         this.playerShape.setImage(new Image(Objects.requireNonNull(this.model.getActivePlayer().getUrlShape())));
                     }
                 });
@@ -81,35 +71,10 @@ public class GameController{
         // Afficher un message de fin de jeu si la partie est terminée
         this.model.gameFinishedProperty().addListener((observable, oldValue, newValue) -> {
             if(newValue){
-               String message = "";
-                if(this.model.isWin()){
-                    message = "Bravo, joueur " + this.model.playerTurnProperty().get() + " a gagné !";
-                } else if(this.model.isDraw()) {
-                    message = "Match nul.";
-                }
-                Alert alert = new AlertBuilder()
-                        .setTitle("Fin de partie")
-                        .setContentText(message)
-                        .setType(Alert.AlertType.INFORMATION)
-                        .addStyleSheet("/com/morpiong/styles/buttons.css")
-                        .setOnCloseRequest(e -> {
-                            Stage stage = (Stage) ((Alert) e.getSource()).getDialogPane().getScene().getWindow();
-                            stage.close();
-                            try {
-                                SceneChangerUtils.changeScene(gamePane,"/com/morpiong/mainmenu-view.fxml");
-                            } catch (IOException ex) {
-                                throw new RuntimeException(ex);
-                            }
-                        })
-                        .build();
-                alert.showAndWait();
+                this.model.onGameFinished(gamePane);
             }
         });
-        this.playerTurnLabel.textProperty().bind(Bindings.concat("Au tour du joueur : ", this.model.playerTurnProperty()));
+        this.playerTurnLabel.textProperty().bind(Bindings.concat("Au tour du joueur ", this.model.playerTurnProperty()));
         this.model.getPlayer().chooseCase(cases);
     }
-    public GameModel getModel(){
-        return this.model;
-    }
-
 }

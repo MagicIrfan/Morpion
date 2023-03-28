@@ -56,10 +56,6 @@ public class AlertBuilder implements DialogBuilder<ButtonType> {
         alert.setHeaderText(this.headerText);
         alert.setContentText(this.contentText);
         alert.setOnCloseRequest(this.handler);
-        /*for(String styleSheet: styleSheets){
-            alert.getDialogPane().getStylesheets().add(
-                    Objects.requireNonNull(getClass().getResource(styleSheet)).toExternalForm());
-        }*/
         return alert;
     }
 }
