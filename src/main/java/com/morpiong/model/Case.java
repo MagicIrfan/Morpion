@@ -7,10 +7,18 @@ public class Case {
 
     private final Pane casePane;
     private final BooleanProperty selectionned;
+    private final StringProperty urlShapeImage;
     private boolean isPair;
     public Case(Pane pane){
         this.casePane = pane;
         this.selectionned = new SimpleBooleanProperty(false);
+        this.urlShapeImage = new SimpleStringProperty();
+    }
+    public StringProperty urlShapeImageProperty(){
+        return this.urlShapeImage;
+    }
+    public String getUrlShape(){
+        return this.urlShapeImage.get();
     }
     public BooleanProperty selectionnedProperty(){
         return this.selectionned;

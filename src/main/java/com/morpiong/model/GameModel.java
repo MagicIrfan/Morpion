@@ -19,7 +19,6 @@ public class GameModel {
         this.nbMoves = new SimpleIntegerProperty(0);
         this.gameFinished = new SimpleBooleanProperty(false);
     }
-
     public IntegerProperty playerTurnProperty(){
         return this.playerTurn;
     }
@@ -164,5 +163,9 @@ public class GameModel {
 
     public void checkFinishedGame(){
         this.gameFinished.set(isDraw() || isWin());
+    }
+
+    public PlayableStrategy getActivePlayer(){
+        return this.playerTurn.get() == 1 ? player : opponent;
     }
 }

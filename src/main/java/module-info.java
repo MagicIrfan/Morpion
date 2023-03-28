@@ -13,8 +13,6 @@ module com.morpiong.morpiong {
     opens com.morpiong.controller to javafx.fxml;
     exports com.morpiong.utils;
     opens com.morpiong.utils to javafx.fxml;
-    exports com.morpiong.model.visitor;
-    opens com.morpiong.model.visitor to javafx.fxml;
-    exports com.morpiong.model.Player;
-    opens com.morpiong.model.Player to javafx.fxml;
+    exports com.morpiong.model.builder;
+    opens com.morpiong.model.builder to javafx.fxml;
 }

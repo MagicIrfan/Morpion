@@ -2,8 +2,14 @@ package com.morpiong.model.Player;
 
 import com.morpiong.model.Case;
 import com.morpiong.model.visitor.CaseVisitor;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
-public class BotStrategy implements PlayableStrategy {
+public class BotStrategy extends PlayableStrategy {
+
+    public BotStrategy(String urlImageShape){
+        super(urlImageShape);
+    }
     @Override
     public void chooseCase(Case[][] cases) {
         Case caseToChoose = null;
@@ -19,7 +25,6 @@ public class BotStrategy implements PlayableStrategy {
                 simpleCase.getPane().setOnMouseClicked(null);
             }
         }
-        caseToChoose.accept(new CaseVisitor(caseToChoose.getPane()));
-        //caseToChoose.getPane().fireEvent(new MouseEvent(MouseEvent.MOUSE_CLICKED, 0, 0, 0, 0, MouseButton.PRIMARY, 1, false, false, false, false, true, false, false, true, false, false, null));
+        caseToChoose.accept(new CaseVisitor());
     }
 }

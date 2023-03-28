@@ -8,12 +8,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
 public class MainMenuController {
-
     @FXML
     public Button playButton;
     @FXML
@@ -23,12 +23,15 @@ public class MainMenuController {
     @FXML
     public Button playBotButton;
     @FXML
+    public Pane mainMenuPane;
+    @FXML
+    public Pane optionsPane;
+
+    @FXML
     public void onPlayButton(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/morpiong/game-view.fxml"));
         Parent root = loader.load();
-        GameController controller = new GameController(); // Créez une nouvelle instance du contrôleur en passant true comme paramètre
-        controller.setIsBot(false);
-        loader.setControllerFactory(c -> controller);
+        GameController controller = loader.getController();
         Scene mainMenuScene = new Scene(root);
         Stage primaryStage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         primaryStage.setScene(mainMenuScene);
@@ -44,9 +47,7 @@ public class MainMenuController {
     public void onPlayBotButton(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/morpiong/game-view.fxml"));
         Parent root = loader.load();
-        GameController controller = new GameController(); // Créez une nouvelle instance du contrôleur en passant true comme paramètre
-        controller.setIsBot(true);
-        loader.setControllerFactory(c -> controller);
+        GameController controller = loader.getController();
         Scene mainMenuScene = new Scene(root);
         Stage primaryStage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         primaryStage.setScene(mainMenuScene);

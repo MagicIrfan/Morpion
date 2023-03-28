@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="gamePane" maxHeight="-Infinity" prefHeight="675.0" prefWidth="601.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.morpiong.controller.GameController">
+<AnchorPane fx:id="gamePane" maxHeight="-Infinity" minHeight="700.0" minWidth="600.0" prefHeight="700.0" prefWidth="600.0" stylesheets="/com/morpiong/styles/button.css, /com/morpiong/styles/game.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.morpiong.controller.GameController">
    <children>
-      <AnchorPane fx:id="platePane" layoutX="1.0" layoutY="229.0" prefHeight="600.0" prefWidth="600.0" />
-      <Label fx:id="playerTurnLabel" layoutX="14.0" layoutY="155.0" prefHeight="41.0" prefWidth="320.0" text="Au tour du joueur">
+      <ImageView fx:id="playerShape" fitHeight="92.0" fitWidth="100.0" layoutX="500.0" pickOnBounds="true" preserveRatio="true" />
+      <AnchorPane fx:id="platePane" layoutY="100.0" prefHeight="600.0" prefWidth="600.0" />
+      <Label fx:id="playerTurnLabel" layoutX="14.0" layoutY="59.0" prefHeight="41.0" prefWidth="320.0" text="Au tour du joueur">
          <font>
             <Font name="Calibri" size="36.0" />
          </font>
