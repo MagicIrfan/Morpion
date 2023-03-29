@@ -8,6 +8,7 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
@@ -274,7 +275,7 @@ public class GameModel {
                     Stage stage = (Stage) ((Alert) e.getSource()).getDialogPane().getScene().getWindow();
                     stage.close();
                     try {
-                        SceneChangerUtils.changeScene(gamePane,"/com/morpiong/mainmenu-view.fxml");
+                        SceneChangerUtils.changeScene(gamePane, FXMLLoader.load(Objects.requireNonNull(SceneChangerUtils.class.getResource("/com/morpiong/mainmenu-view.fxml"))));
                     } catch (IOException ex) {
                         throw new RuntimeException(ex);
                     }

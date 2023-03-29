@@ -1,5 +1,6 @@
 package com.morpiong.controller;
 
+import com.morpiong.utils.SceneChangerUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -48,9 +49,7 @@ public class MainMenuController {
         GameController controller = loader.getController();
         controller.setPlayingWithBot(isPlayingWithBot);
         controller.initialize();
-        Scene mainMenuScene = new Scene(root);
-        Stage primaryStage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-        primaryStage.setScene(mainMenuScene);
-        primaryStage.show();
+        Pane pane = (Pane) ((Node) actionEvent.getSource()).getParent();
+        SceneChangerUtils.changeScene(pane, (Pane)root);
     }
 }
