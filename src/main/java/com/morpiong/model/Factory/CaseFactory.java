@@ -8,14 +8,14 @@ import com.morpiong.view.CasePane;
  *
  * Elle contient une méthode statique "create" qui crée et renvoie une nouvelle instance de la classe Case.
  */
-public class CaseFactory {
+public class CaseFactory implements Factory<Case> {
 
     /**
      * Crée une nouvelle instance de la classe Case.
      *
      * @return la nouvelle instance de la classe Case
      */
-    public static Case create(){
+    public Case create(){
         return new Case(new CasePane());
     }
 }

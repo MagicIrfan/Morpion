@@ -244,18 +244,14 @@ public class GameModel {
      * @return un booléen permettant de savoir si le jeu se finit sur une égalité
      */
     public boolean isDraw(){
-        boolean allSelectionned = true;
         for(Case[] rowCase: this.cases) {
             for (Case simpleCase : rowCase) {
                 if(!simpleCase.isSelectionned()){
-                    allSelectionned = false;
-                    break;
+                    return false;
                 }
             }
-            if(!allSelectionned)
-                break;
         }
-        return allSelectionned && !isWin();
+        return !isWin();
     }
 
     /**
@@ -263,9 +259,9 @@ public class GameModel {
      * @param gamePane le pane principal du jeu
      */
     public void onGameFinished(Pane gamePane){
-        this.fillWinningCases();
         String message = "";
         if(this.isWin()){
+            this.fillWinningCases();
             message = "Bravo, joueur " + this.playerTurnProperty().get() + " a gagné !";
         } else if(this.isDraw()) {
             message = "Match nul.";

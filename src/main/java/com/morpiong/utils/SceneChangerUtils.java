@@ -22,9 +22,16 @@ public class SceneChangerUtils {
     public static void changeScene(Pane pane, String url) throws IOException {
         FXMLLoader loader = new FXMLLoader(SceneChangerUtils.class.getResource(url));
         Parent root = loader.load();
-        Scene mainMenuScene = new Scene(root);
-        Stage primaryStage = (Stage) pane.getScene().getWindow();
-        primaryStage.setScene(mainMenuScene);
-        primaryStage.show();
+        Scene newScene = new Scene(root);
+        Stage currentStage = (Stage) pane.getScene().getWindow();
+        //Scene currentStage = primaryStage.getScene();
+        if (currentStage.getScene() != null) {
+            currentStage.getScene().getRoot().setDisable(true); // disable the old scene
+        }
+        currentStage.setScene(newScene);
+        currentStage.show();
+        if (currentStage.getScene() != null) {
+            currentStage.getScene().getRoot().setDisable(false); // enable the new scene
+        }
     }
 }
