@@ -54,7 +54,7 @@ public class GameController {
         this.model = new GameModel(plate.getCases());
         this.model.setPlayerStrategy(new PlayerStrategy(ImageUtils.O));
         this.model.setOpponentStrategy(isPlayingWithBot ? new BotStrategy(ImageUtils.X) : new PlayerStrategy(ImageUtils.X));
-        this.playerShape.setImage(new Image(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(this.model.getPlayer().getUrlShape()))));
+        this.playerShape.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(this.model.getPlayer().getUrlShape()))));
         this.createBindings();
     }
 
@@ -78,7 +78,7 @@ public class GameController {
                     if (newValue) {
                         this.model.onTurnFinished(simpleCase);
                         this.model.onBeginTurn();
-                        this.playerShape.setImage(new Image(Objects.requireNonNull(this.model.getActivePlayer().getUrlShape())));
+                        this.playerShape.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(this.model.getActivePlayer().getUrlShape()))));
                     }
                 });
             }

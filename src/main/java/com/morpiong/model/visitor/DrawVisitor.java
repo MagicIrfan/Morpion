@@ -26,6 +26,6 @@ public class DrawVisitor implements Visitor {
      */
     public void visit(Case caseElement){
         caseElement.urlShapeImageProperty().set(imageUrl);
-        ((CasePane) caseElement.getPane()).setImage(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(caseElement.getUrlShape())));
+        ((CasePane) caseElement.getPane()).setImage(Objects.requireNonNull(getClass().getResourceAsStream(caseElement.getUrlShape())));
     }
 }

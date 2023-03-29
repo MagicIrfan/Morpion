@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="gamePane" maxHeight="-Infinity" minHeight="700.0" minWidth="600.0" prefHeight="700.0" prefWidth="600.0" stylesheets="/com/morpiong/styles/button.css, /com/morpiong/styles/game.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.morpiong.controller.GameController">
+<AnchorPane fx:id="gamePane" maxHeight="-Infinity" minHeight="700.0" minWidth="600.0" prefHeight="700.0" prefWidth="600.0" stylesheets="@styles/button.css, @styles/game.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.morpiong.controller.GameController">
    <children>
       <ImageView fx:id="playerShape" fitHeight="92.0" fitWidth="100.0" layoutX="500.0" pickOnBounds="true" preserveRatio="true" />
       <AnchorPane fx:id="platePane" layoutY="100.0" prefHeight="600.0" prefWidth="600.0" />
