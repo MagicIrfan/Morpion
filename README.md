@@ -26,7 +26,7 @@ Le jeu peut être lancé depuis l'IDE IntelliJ IDEA en ouvrant le projet et en e
 
 ```gradle run``` ceci va éxécuter le programme
 
-<h2> :warning: Il faut avoir Gradle pour éxécuter ces commandes ! </h2>
+<h1> :warning: Il faut avoir Gradle pour éxécuter ces commandes ! </h1>
 
 # Le jeu
 
