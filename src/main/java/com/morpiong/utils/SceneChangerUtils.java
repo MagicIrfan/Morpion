@@ -6,6 +6,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -49,22 +50,16 @@ public class SceneChangerUtils {
      */
     public void changeScene(Node node, Parent newParent) throws IOException {
         Stage currentStage = (Stage) node.getScene().getWindow();
+        double newWidth = ((Region) newParent).getPrefWidth();
+        double newHeight = ((Region) newParent).getPrefHeight();
         executor.submit(() -> {
             Platform.runLater(() -> {
-                // Supprime tous les enfants du nœud parent avant de définir le nouveau nœud racine
-                clearParentChildren(node.getParent());
-                currentStage.getScene().setRoot(newParent);
+                Scene currentScene = currentStage.getScene();
+                currentStage.setWidth(newWidth);
+                currentStage.setHeight(newHeight);
+                currentScene.setRoot(newParent);
             });
         });
-    }
-
-    private void clearParentChildren(Parent parent) {
-        if (parent instanceof Pane) {
-            ((Pane) parent).getChildren().clear();
-        }
-        else if (parent instanceof Group) {
-            ((Group) parent).getChildren().clear();
-        }
     }
 
     /**

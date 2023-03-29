@@ -77,8 +77,11 @@ public class GameController {
                 simpleCase.selectionnedProperty().addListener((observable, oldValue, newValue) -> {
                     if (newValue) {
                         this.model.onTurnFinished(simpleCase);
-                        this.model.onBeginTurn();
-                        this.playerShape.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(this.model.getActivePlayer().getUrlShape()))));
+                        if(!this.model.gameFinishedProperty().get()){
+                            this.model.onBeginTurn();
+                            this.playerShape.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(this.model.getActivePlayer().getUrlShape()))));
+                        }
+
                     }
                 });
             }
