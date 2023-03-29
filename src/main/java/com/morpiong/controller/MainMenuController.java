@@ -37,6 +37,7 @@ public class MainMenuController {
         Node source = (Node) actionEvent.getSource();
         Stage stage = (Stage) source.getScene().getWindow();
         stage.close();
+        SceneChangerUtils.getInstance().shutdown();
     }
     @FXML
     public void onPlayBotButton(ActionEvent actionEvent) throws IOException {
@@ -50,6 +51,6 @@ public class MainMenuController {
         controller.setPlayingWithBot(isPlayingWithBot);
         controller.initialize();
         Pane pane = (Pane) ((Node) actionEvent.getSource()).getParent();
-        SceneChangerUtils.changeScene(pane, (Pane)root);
+        SceneChangerUtils.getInstance().changeScene(pane, root);
     }
 }

@@ -1,6 +1,10 @@
 package com.morpiong.utils;
 
 import javafx.application.Platform;
+import javafx.scene.Group;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
@@ -9,33 +13,65 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * Classe utilitaire pour changer la scène JavaFX.
+
+ Cette classe utilitaire fournit des méthodes pour changer de scène dans une application JavaFX.
+
+ Elle utilise un exécuteur de thread unique pour garantir que les changements de scène se produisent dans le thread de l'application JavaFX.
  */
 public class SceneChangerUtils {
 
+    private static SceneChangerUtils instance = null;
     private static final ExecutorService executor = Executors.newSingleThreadExecutor();
 
     /**
-     * Change la scène JavaFX avec le panneau spécifié de manière asynchrone.
-     *
-     * @param pane    le panneau qui contient la scène actuelle
-     * @param newPane le nouveau panneau qui remplacera le panneau actuel
-     * @throws IOException si une erreur survient lors de la lecture du panneau FXML
+     Constructeur privé pour empêcher l'instanciation directe de la classe.
      */
-    public static void changeScene(Pane pane, Pane newPane) throws IOException {
-        pane.getChildren().clear(); // Supprime tous les enfants du panneau
-        Stage currentStage = (Stage) pane.getScene().getWindow();
+    private SceneChangerUtils() {
+    }
+
+    /**
+     Retourne l'instance singleton de la classe SceneChangerUtils.
+     @return l'instance singleton de la classe SceneChangerUtils.
+     */
+    public static synchronized SceneChangerUtils getInstance() {
+        if (instance == null) {
+            instance = new SceneChangerUtils();
+        }
+        return instance;
+    }
+
+    /**
+     Change de scène en définissant un nouveau nœud racine pour la scène de la fenêtre.
+     Tous les enfants du nœud d'origine sont supprimés avant de définir le nouveau nœud racine.
+     @param node le nœud dont la scène doit être changée.
+     @param newParent le nouveau nœud parent à définir comme racine de la scène.
+     @throws IOException si une erreur se produit lors du chargement de la nouvelle scène.
+     */
+    public void changeScene(Node node, Parent newParent) throws IOException {
+        Stage currentStage = (Stage) node.getScene().getWindow();
         executor.submit(() -> {
             Platform.runLater(() -> {
-                currentStage.getScene().setRoot(newPane);
+                // Supprime tous les enfants du nœud parent avant de définir le nouveau nœud racine
+                clearParentChildren(node.getParent());
+                currentStage.getScene().setRoot(newParent);
             });
         });
     }
 
+    private void clearParentChildren(Parent parent) {
+        if (parent instanceof Pane) {
+            ((Pane) parent).getChildren().clear();
+        }
+        else if (parent instanceof Group) {
+            ((Group) parent).getChildren().clear();
+        }
+    }
+
     /**
-     * Arrête proprement le thread de changement de scène.
+     Arrête le service d'exécuteur utilisé par cette classe.
+     Cela devrait être appelé lorsque l'application se ferme pour éviter les fuites de ressources.
      */
-    public static void shutdown() {
+    public void shutdown() {
         executor.shutdown();
     }
 }

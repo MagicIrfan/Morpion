@@ -272,10 +272,9 @@ public class GameModel {
                 .setContentText(message)
                 .setType(Alert.AlertType.INFORMATION)
                 .setOnCloseRequest(e -> {
-                    Stage stage = (Stage) ((Alert) e.getSource()).getDialogPane().getScene().getWindow();
-                    stage.close();
+                    this.clearCases();
                     try {
-                        SceneChangerUtils.changeScene(gamePane, FXMLLoader.load(Objects.requireNonNull(SceneChangerUtils.class.getResource("/com/morpiong/mainmenu-view.fxml"))));
+                        SceneChangerUtils.getInstance().changeScene(gamePane, FXMLLoader.load(Objects.requireNonNull(SceneChangerUtils.class.getResource("/com/morpiong/mainmenu-view.fxml"))));
                     } catch (IOException ex) {
                         throw new RuntimeException(ex);
                     }
@@ -290,6 +289,15 @@ public class GameModel {
     private void fillWinningCases(){
         for(Case singleCase : this.getWinningCases()){
             singleCase.getPane().setBackground(new Background(new BackgroundFill(Color.ORANGE, null, null)));
+        }
+    }
+
+    private void clearCases(){
+        for (Case[] rowCase : this.cases) {
+            for (Case simpleCase : rowCase) {
+                // On remet chaque case à son état initial
+                simpleCase.getPane().getChildren().clear();
+            }
         }
     }
 

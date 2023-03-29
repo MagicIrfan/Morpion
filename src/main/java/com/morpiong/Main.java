@@ -20,6 +20,7 @@ public class Main extends Application {
         stage.setTitle("Morpion");
         stage.setScene(scene);
         stage.show();
+        stage.setResizable(false);
     }
     public static void main(String[] args) {
         launch();
