@@ -1,7 +1,7 @@
 package com.morpiong.model.Player;
 
 import com.morpiong.model.Case;
-import com.morpiong.model.visitor.SelectVisitor;
+import com.morpiong.model.visitor.*;
 import javafx.scene.input.MouseEvent;
 
 /**
@@ -28,7 +28,7 @@ public class PlayerStrategy extends PlayableStrategy {
             for (Case simpleCase : rowCase) {
                 simpleCase.getPane().setOnMouseClicked((MouseEvent event) ->{
                     if(!simpleCase.selectionnedProperty().get()){
-                        simpleCase.accept(new SelectVisitor());
+                        simpleCase.accept(new SelectCaseVisitor());
                     }
                 });
             }

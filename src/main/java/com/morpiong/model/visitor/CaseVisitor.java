@@ -5,7 +5,7 @@ import com.morpiong.model.Case;
 /**
  * L'interface Visitor définit une méthode visit pour chaque type d'élément visitable.
  */
-public interface Visitor {
+public interface CaseVisitor {
 
     /**
      * Visite l'élément de type Case.

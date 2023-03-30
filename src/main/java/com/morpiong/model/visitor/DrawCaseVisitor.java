@@ -8,7 +8,7 @@ import java.util.Objects;
 /**
  * Un visiteur pour dessiner une forme sur une case.
  */
-public class DrawVisitor implements Visitor {
+public class DrawCaseVisitor implements CaseVisitor {
 
     private final String imageUrl;
 
@@ -16,7 +16,7 @@ public class DrawVisitor implements Visitor {
      * Constructeur de la classe DrawVisitor.
      * @param imageUrl l'URL de l'image représentant la forme à dessiner.
      */
-    public DrawVisitor(String imageUrl){
+    public DrawCaseVisitor(String imageUrl){
         this.imageUrl = imageUrl;
     }
 

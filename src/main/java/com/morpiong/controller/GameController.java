@@ -3,6 +3,7 @@ package com.morpiong.controller;
 import com.morpiong.model.GameModel;
 import com.morpiong.model.Plate;
 import com.morpiong.model.Player.BotStrategy;
+import com.morpiong.model.Player.MinMaxBotStrategy;
 import com.morpiong.model.Player.PlayerStrategy;
 import com.morpiong.utils.ImageUtils;
 import com.morpiong.utils.SceneChangerUtils;

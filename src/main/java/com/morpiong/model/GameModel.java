@@ -2,7 +2,7 @@ package com.morpiong.model;
 
 import com.morpiong.model.Player.PlayableStrategy;
 import com.morpiong.model.builder.AlertBuilder;
-import com.morpiong.model.visitor.DrawVisitor;
+import com.morpiong.model.visitor.DrawCaseVisitor;
 import com.morpiong.utils.SceneChangerUtils;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
@@ -308,7 +308,7 @@ public class GameModel {
         // Définir la paire pour le joueur en cours
         simpleCase.setPair(this.getNbMoves() % 2 == 0);
         // Afficher le coup sur le plateau
-        simpleCase.accept(new DrawVisitor(this.getActivePlayer().getUrlShape()));
+        simpleCase.accept(new DrawCaseVisitor(this.getActivePlayer().getUrlShape()));
         // Vérifier si la partie est terminée
         this.checkFinishedGame();
     }

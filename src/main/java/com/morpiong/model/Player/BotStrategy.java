@@ -1,7 +1,7 @@
 package com.morpiong.model.Player;
 
 import com.morpiong.model.Case;
-import com.morpiong.model.visitor.SelectVisitor;
+import com.morpiong.model.visitor.SelectCaseVisitor;
 import javafx.application.Platform;
 
 /**
@@ -50,7 +50,7 @@ public class BotStrategy extends PlayableStrategy {
             }
             Case finalCaseToChoose = caseToChoose;
             Platform.runLater(() -> {
-                finalCaseToChoose.accept(new SelectVisitor());
+                finalCaseToChoose.accept(new SelectCaseVisitor());
             });
         });
         botThread.start();

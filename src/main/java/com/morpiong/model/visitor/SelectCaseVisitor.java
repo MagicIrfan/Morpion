@@ -4,9 +4,9 @@ import com.morpiong.model.Case;
 
 /**
 
- Implémentation de l'interface Visitor permettant de sélectionner une case.
+ Implémentation de l'interface CaseVisitor permettant de sélectionner une case.
  */
-public class SelectVisitor implements Visitor {
+public class SelectCaseVisitor implements CaseVisitor {
 
     /**
      Visite la case donnée en paramètre et la sélectionne en mettant sa propriété de sélection à vrai.

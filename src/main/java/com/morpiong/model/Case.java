@@ -1,5 +1,5 @@
 package com.morpiong.model;
-import com.morpiong.model.visitor.Visitor;
+import com.morpiong.model.visitor.*;
 import javafx.beans.property.*;
 import javafx.scene.layout.Pane;
 
@@ -68,7 +68,7 @@ public class Case {
      Accepte le visiteur donné en paramètre pour la visite de la case.
      @param visitor le visiteur à accepter.
      */
-    public void accept(Visitor visitor){
+    public void accept(CaseVisitor visitor){
         visitor.visit(this);
     }
 
