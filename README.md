@@ -37,6 +37,7 @@ Le jeu permet :
 
 * De jouer à deux joueurs sur le même ordinateur
 * De jouer contre un bot qui utilise une stratégie simple pour choisir ses coups
+* De faire jouer deux bots
 
 # Images
 

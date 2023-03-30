@@ -36,7 +36,8 @@ public class GameController {
     @FXML
     public ImageView playerShape;
     private GameModel model;
-    private boolean isPlayingWithBot;
+    private boolean playerIsBot;
+    private boolean opponentIsBot;
 
     /**
      * Initialise la vue principale du jeu.
@@ -52,19 +53,28 @@ public class GameController {
         Plate plate = loader.getController();
         platePane.getChildren().add(root);
         this.model = new GameModel(plate.getCases());
-        this.model.setPlayerStrategy(new PlayerStrategy(ImageUtils.O));
-        this.model.setOpponentStrategy(isPlayingWithBot ? new BotStrategy(ImageUtils.X) : new PlayerStrategy(ImageUtils.X));
+        this.model.setPlayerStrategy(playerIsBot ? new BotStrategy(ImageUtils.O) : new PlayerStrategy(ImageUtils.O));
+        this.model.setOpponentStrategy(opponentIsBot ? new BotStrategy(ImageUtils.X) : new PlayerStrategy(ImageUtils.X));
         this.playerShape.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(this.model.getPlayer().getUrlShape()))));
         this.createBindings();
     }
 
     /**
-     * Définit si le joueur joue contre un bot.
+     * Définit si le joueur est un bot.
      *
-     * @param isBot vrai si le joueur joue contre un bot, faux sinon.
+     * @param isBot vrai si le joueur est un bot, faux sinon.
      */
-    public void setPlayingWithBot(boolean isBot) {
-        this.isPlayingWithBot = isBot;
+    public void setPlayerIsBot(boolean isBot) {
+        this.playerIsBot = isBot;
+    }
+
+    /**
+     * Définit si l'adversaire est un bot.
+     *
+     * @param isBot vrai si l'adversaire est un bot, faux sinon.
+     */
+    public void setOpponentIsBot(boolean isBot) {
+        this.opponentIsBot = isBot;
     }
 
     /**

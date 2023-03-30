@@ -56,13 +56,19 @@ public class MainMenuController {
     public Pane optionsPane;
 
     /**
+     * Bouton de lancement d'une partie ordinateur contre l'ordinateur.
+     */
+    @FXML
+    public Button playBotVsBotButton;
+
+    /**
      * Lance une partie contre un joueur humain lorsque le bouton playButton est cliqué.
      * @param actionEvent l'événement de clic sur le bouton.
      * @throws IOException si une erreur se produit lors du chargement de la vue du jeu.
      */
     @FXML
     public void onPlayButton(ActionEvent actionEvent) throws IOException {
-        this.play(actionEvent,false);
+        this.play(actionEvent,false,false);
     }
 
     /**
@@ -83,21 +89,33 @@ public class MainMenuController {
      * @throws IOException si une erreur se produit lors du chargement de la vue du jeu.
      */
     @FXML
-    public void onPlayBotButton(ActionEvent actionEvent) throws IOException {
-        this.play(actionEvent,true);
+    public void onPlayerVsBotButton(ActionEvent actionEvent) throws IOException {
+        this.play(actionEvent,false,true);
+    }
+
+    /**
+     * Lance une partie contre l'ordinateur lorsque le bouton playBotVsBotButton est cliqué.
+     * @param actionEvent l'événement de clic sur le bouton.
+     * @throws IOException si une erreur se produit lors du chargement de la vue du jeu.
+     */
+    @FXML
+    public void onPlayBotVsBotButton(ActionEvent actionEvent) throws IOException {
+        this.play(actionEvent,true,true);
     }
 
     /**
      * Charge la vue du jeu et initialise le contrôleur de la vue du jeu avec les informations de la partie à jouer.
      * @param actionEvent l'événement de clic sur le bouton de lancement de la partie.
-     * @param isPlayingWithBot indique si la partie est jouée contre l'ordinateur ou contre un joueur humain.
+     * @param isPlayerBot indique si la le joueur 1 est un ordinateur ou humain.
+     * @param isOpponentBot indique si la partie est jouée contre l'ordinateur ou contre un joueur humain.
      * @throws IOException si une erreur se produit lors du chargement de la vue du jeu.
      */
-    private void play(ActionEvent actionEvent, boolean isPlayingWithBot) throws IOException {
+    private void play(ActionEvent actionEvent, boolean isPlayerBot, boolean isOpponentBot) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/morpiong/game-view.fxml"));
         Parent root = loader.load();
         GameController controller = loader.getController();
-        controller.setPlayingWithBot(isPlayingWithBot);
+        controller.setPlayerIsBot(isPlayerBot);
+        controller.setOpponentIsBot(isOpponentBot);
         controller.initialize();
         Pane pane = (Pane) ((Node) actionEvent.getSource()).getParent();
         SceneChangerUtils.getInstance().changeScene(pane, root);
