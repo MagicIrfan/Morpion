@@ -1,3 +1,9 @@
+[![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-white.svg)](https://sonarcloud.io/summary/new_code?id=MagicIrfan_Morpion)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=MagicIrfan_Morpion&metric=vulnerabilities)](https://sonarcloud.io/project/overview?id=MagicIrfan_Morpion)
+[![Duplications](https://sonarcloud.io/api/project_badges/measure?project=MagicIrfan_Morpion&metric=duplicated_lines_density)](https://sonarcloud.io/project/overview?id=MagicIrfan_Morpion)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=MagicIrfan_Morpion&metric=sqale_rating)](https://sonarcloud.io/project/overview?id=MagicIrfan_Morpion)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=MagicIrfan_Morpion&metric=bugs)](https://sonarcloud.io/project/overview?id=MagicIrfan_Morpion)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=MagicIrfan_Morpion&metric=code_smells)](https://sonarcloud.io/project/overview?id=MagicIrfan_Morpion)
 # Morpion
 
 Ce projet a été réalisé en Java, dans le but d'apprendre à utiliser JavaFX et FXML tout en faisant en sorte que le code soit le plus compréhensible possible grâce aux respect des principes SOLID et à l'utilisation de certains patrons de conception tels que :
