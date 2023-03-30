@@ -26,6 +26,8 @@ Le jeu peut être lancé depuis l'IDE IntelliJ IDEA en ouvrant le projet et en e
 
 ```gradle run``` ceci va éxécuter le programme
 
+<h1> :warning: Il faut avoir Gradle pour éxécuter ces commandes ! </h1>
+
 # Le jeu
 
 Le jeu a été conçu avec une interface graphique agréable et intuitive. Les cases du plateau sont représentées par des boutons, et les pions par des formes géométriques (O pour le joueur O et X pour le joueur X).
