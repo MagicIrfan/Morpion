@@ -29,25 +29,28 @@ public class BotStrategy extends PlayableStrategy {
     public void chooseCase(Case[][] cases) {
         botThread = new Thread(() -> {
             Platform.runLater(() -> {
-                Case caseToChoose = null;
-                while(caseToChoose == null) {
-                    int randIndex = (int) (Math.random() * 3);
-                    int randJIndex = (int) (Math.random() * 3);
-                    if (!cases[randIndex][randJIndex].isSelectionned()) {
-                        caseToChoose = cases[randIndex][randJIndex];
-                    }
-                }
                 for(Case[] rowCase: cases) {
                     for (Case simpleCase : rowCase) {
                         simpleCase.getPane().setOnMouseClicked(null);
                     }
                 }
-                try {
-                    Thread.sleep(1000); // attendre une seconde
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+            });
+            Case caseToChoose = null;
+            while (caseToChoose == null) {
+                int randIndex = (int) (Math.random() * 3);
+                int randJIndex = (int) (Math.random() * 3);
+                if (!cases[randIndex][randJIndex].isSelectionned()) {
+                    caseToChoose = cases[randIndex][randJIndex];
                 }
-                caseToChoose.accept(new SelectVisitor());
+            }
+            try {
+                Thread.sleep(1000); // wait for one second
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            Case finalCaseToChoose = caseToChoose;
+            Platform.runLater(() -> {
+                finalCaseToChoose.accept(new SelectVisitor());
             });
         });
         botThread.start();

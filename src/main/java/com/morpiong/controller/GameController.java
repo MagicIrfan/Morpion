@@ -81,7 +81,6 @@ public class GameController {
                             this.model.onBeginTurn();
                             this.playerShape.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(this.model.getActivePlayer().getUrlShape()))));
                         }
-
                     }
                 });
             }
