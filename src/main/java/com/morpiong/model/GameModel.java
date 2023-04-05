@@ -4,15 +4,18 @@ import com.morpiong.model.Player.PlayableStrategy;
 import com.morpiong.model.builder.AlertBuilder;
 import com.morpiong.model.visitor.DrawCaseVisitor;
 import com.morpiong.utils.SceneChangerUtils;
+import com.morpiong.view.CasePane;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -29,7 +32,7 @@ import java.util.Objects;
  * si la partie est terminée ou non.
  */
 public class GameModel {
-    private final Case[][] cases;
+    private final Plate plate;
     private final IntegerProperty nbMoves;
     private final BooleanProperty gameFinished;
     private final IntegerProperty playerTurn;
@@ -38,10 +41,10 @@ public class GameModel {
 
     /**
      * Constructeur pour la classe GameModel.
-     * @param cases la grille de cases du jeu
+     * @param plate le plateau du jeu
      */
-    public GameModel(Case[][] cases){
-        this.cases = cases;
+    public GameModel(Plate plate){
+        this.plate = plate;
         this.playerTurn = new SimpleIntegerProperty(1);
         this.nbMoves = new SimpleIntegerProperty(0);
         this.gameFinished = new SimpleBooleanProperty(false);
@@ -95,14 +98,6 @@ public class GameModel {
     }
 
     /**
-     * Getter pour la grille de cases.
-     * @return la grille de cases
-     */
-    public Case[][] getCases(){
-        return this.cases;
-    }
-
-    /**
      * Vérifie si un joueur a gagné la partie.
      * @return true si un joueur a gagné, false sinon
      */
@@ -138,16 +133,16 @@ public class GameModel {
             boolean allSelected = true;
             List<Case> winningCells = new ArrayList<>();
             for (int j = 0; j < 3; j++) {
-                if (!this.cases[i][j].isSelectionned()) {
+                if (!plate.getCases()[i][j].isSelectionned()) {
                     allSelected = false;
                 }
-                if (this.cases[i][j].isPair()) {
+                if (plate.getCases()[i][j].isPair()) {
                     allUnpair = false;
                 } else {
                     allPair = false;
                 }
                 if(allPair || allUnpair){
-                    winningCells.add(this.cases[i][j]);
+                    winningCells.add(plate.getCases()[i][j]);
                 }
             }
 
@@ -169,16 +164,16 @@ public class GameModel {
             boolean allSelected = true;
             List<Case> winningCells = new ArrayList<>();
             for (int j = 0; j < 3; j++) {
-                if (!this.cases[j][i].isSelectionned()) {
+                if (!plate.getCases()[j][i].isSelectionned()) {
                     allSelected = false;
                 }
-                if (this.cases[j][i].isPair()) {
+                if (plate.getCases()[j][i].isPair()) {
                     allUnpair = false;
                 } else {
                     allPair = false;
                 }
                 if (allPair || allUnpair) {
-                    winningCells.add(this.cases[j][i]);
+                    winningCells.add(plate.getCases()[j][i]);
                 }
             }
 
@@ -202,15 +197,15 @@ public class GameModel {
         List<Case> diagonal2 = new ArrayList<>();
 
         for (int i = 0; i < 3; i++) {
-            if (!this.cases[i][i].isSelectionned()) {
+            if (!plate.getCases()[i][i].isSelectionned()) {
                 allSelected = false;
             }
-            if (this.cases[i][i].isPair()) {
+            if (plate.getCases()[i][i].isPair()) {
                 allUnpair = false;
             } else {
                 allPair = false;
             }
-            diagonal1.add(this.cases[i][i]);
+            diagonal1.add(plate.getCases()[i][i]);
         }
 
         if (allSelected && (allPair || allUnpair)) {
@@ -222,15 +217,15 @@ public class GameModel {
         allSelected = true;
 
         for (int i = 0; i < 3; i++) {
-            if (!this.cases[i][2 - i].isSelectionned()) {
+            if (!plate.getCases()[i][2 - i].isSelectionned()) {
                 allSelected = false;
             }
-            if (this.cases[i][2 - i].isPair()) {
+            if (plate.getCases()[i][2 - i].isPair()) {
                 allUnpair = false;
             } else {
                 allPair = false;
             }
-            diagonal2.add(this.cases[i][2 - i]);
+            diagonal2.add(plate.getCases()[i][2 - i]);
         }
 
         if (allSelected && (allPair || allUnpair)) {
@@ -245,7 +240,7 @@ public class GameModel {
      * @return un booléen permettant de savoir si le jeu se finit sur une égalité
      */
     public boolean isDraw(){
-        for(Case[] rowCase: this.cases) {
+        for(Case[] rowCase: plate.getCases()) {
             for (Case simpleCase : rowCase) {
                 if(!simpleCase.isSelectionned()){
                     return false;
@@ -272,7 +267,6 @@ public class GameModel {
                 .setContentText(message)
                 .setType(Alert.AlertType.INFORMATION)
                 .setOnCloseRequest(e -> {
-                    this.clearCases();
                     try {
                         SceneChangerUtils.getInstance().changeScene(gamePane, FXMLLoader.load(Objects.requireNonNull(SceneChangerUtils.class.getResource("/com/morpiong/mainmenu-view.fxml"))));
                     } catch (IOException ex) {
@@ -288,27 +282,26 @@ public class GameModel {
      */
     private void fillWinningCases(){
         for(Case singleCase : this.getWinningCases()){
-            singleCase.getPane().setBackground(new Background(new BackgroundFill(Color.ORANGE, null, null)));
-        }
-    }
-
-    private void clearCases(){
-        for (Case[] rowCase : this.cases) {
-            for (Case simpleCase : rowCase) {
-                // On remet chaque case à son état initial
-                simpleCase.getPane().getChildren().clear();
-            }
+            int x = singleCase.getXCoord();
+            int y = singleCase.getYCoord();
+            Node node = this.plate.getPlatePane().getChildren().stream()
+                    .filter(n -> GridPane.getRowIndex(n) == x && GridPane.getColumnIndex(n) == y)
+                    .findFirst()
+                    .orElse(null);
+            ((CasePane)node).setBackground(new Background(new BackgroundFill(Color.ORANGE, null, null)));
         }
     }
 
     /**
      * Méthode publique qui execute du code lorsqu'un tour de jeu se termine
+     * @param simpleCase la case sélectionné
+     * @param casePane la représentation graphique de la case sélectionné
      */
-    public void onTurnFinished(Case simpleCase){
+    public void onTurnFinished(Case simpleCase,Pane casePane){
         // Définir la paire pour le joueur en cours
         simpleCase.setPair(this.getNbMoves() % 2 == 0);
         // Afficher le coup sur le plateau
-        simpleCase.accept(new DrawCaseVisitor(this.getActivePlayer().getUrlShape()));
+        simpleCase.accept(new DrawCaseVisitor(this.getActivePlayer().getUrlShape(),casePane));
         // Vérifier si la partie est terminée
         this.checkFinishedGame();
     }
@@ -321,7 +314,7 @@ public class GameModel {
         // Changer le tour de joueur
         this.setPlayerTurn(this.getNbMoves() % 2 == 0 ? 1 : 2);
         // Si l'option "bot" est activée, faire jouer le bot
-        this.getActivePlayer().chooseCase(cases);
+        this.getActivePlayer().chooseCase(plate);
     }
 
     /**

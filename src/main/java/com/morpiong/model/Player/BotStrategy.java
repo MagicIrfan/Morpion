@@ -1,8 +1,12 @@
 package com.morpiong.model.Player;
 
 import com.morpiong.model.Case;
+import com.morpiong.model.Plate;
 import com.morpiong.model.visitor.SelectCaseVisitor;
+import com.morpiong.view.CasePane;
 import javafx.application.Platform;
+import javafx.scene.Node;
+import javafx.scene.layout.GridPane;
 
 /**
  * Une stratégie de jeu implémentant un joueur bot qui choisit aléatoirement une case non sélectionnée.
@@ -23,15 +27,26 @@ public class BotStrategy extends PlayableStrategy {
     /**
      * Choisit une case aléatoire non sélectionnée parmi toutes les cases fournies et la sélectionne.
      *
-     * @param cases la matrice des cases
+     * @param plate le plateau du jeu
      */
     @Override
-    public void chooseCase(Case[][] cases) {
+    public void chooseCase(Plate plate) {
+        Case[][] cases = plate.getCases();
+        GridPane platePane = (GridPane) plate.getPlatePane();
         botThread = new Thread(() -> {
             Platform.runLater(() -> {
                 for(Case[] rowCase: cases) {
                     for (Case simpleCase : rowCase) {
-                        simpleCase.getPane().setOnMouseClicked(null);
+                        int x = simpleCase.getXCoord();
+                        int y = simpleCase.getYCoord();
+                        Node node = platePane.getChildren().stream()
+                                .filter(n -> GridPane.getRowIndex(n) == x && GridPane.getColumnIndex(n) == y)
+                                .findFirst()
+                                .orElse(null);
+                        if (node instanceof CasePane) {
+                            CasePane casePane = (CasePane) node;
+                            casePane.setOnMouseClicked(null);
+                        }
                     }
                 }
             });

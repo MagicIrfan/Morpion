@@ -6,9 +6,11 @@ import com.morpiong.model.Player.BotStrategy;
 import com.morpiong.model.Player.PlayerStrategy;
 import com.morpiong.utils.ImageUtils;
 import com.morpiong.model.Case;
+import com.morpiong.view.CasePane;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -25,14 +27,13 @@ public class GameController {
     @FXML
     public Pane gamePane;
     @FXML
-    public Pane platePane;
-    @FXML
     public Label playerTurnLabel;
     @FXML
     public ImageView playerShape;
     private GameModel model;
     private boolean playerIsBot;
     private boolean opponentIsBot;
+    private Plate plate;
 
     /**
      * Initialise la vue principale du jeu.
@@ -45,9 +46,10 @@ public class GameController {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        Plate plate = loader.getController();
-        platePane.getChildren().add(root);
-        this.model = new GameModel(plate.getCases());
+        this.plate = loader.getController();
+        root.setLayoutY(159);
+        gamePane.getChildren().add(root);
+        this.model = new GameModel(plate);
         this.model.setPlayerStrategy(playerIsBot ? new BotStrategy(ImageUtils.O) : new PlayerStrategy(ImageUtils.O));
         this.model.setOpponentStrategy(opponentIsBot ? new BotStrategy(ImageUtils.X) : new PlayerStrategy(ImageUtils.X));
         this.playerShape.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(this.model.getPlayer().getUrlShape()))));
@@ -76,12 +78,18 @@ public class GameController {
      * Crée les bindings pour les cases du plateau de jeu.
      */
     private void createBindings() {
-        Case[][] cases = this.model.getCases();
+        Case[][] cases = plate.getCases();
         for (Case[] rowCase : cases) {
             for (Case simpleCase : rowCase) {
                 simpleCase.selectionnedProperty().addListener((observable, oldValue, newValue) -> {
                     if (newValue) {
-                        this.model.onTurnFinished(simpleCase);
+                        int x = simpleCase.getXCoord();
+                        int y = simpleCase.getYCoord();
+                        Node node = (this.plate.getPlatePane()).getChildren().stream()
+                                .filter(n -> GridPane.getRowIndex(n) == x && GridPane.getColumnIndex(n) == y)
+                                .findFirst()
+                                .orElse(null);
+                        this.model.onTurnFinished(simpleCase,(Pane) node);
                         if(!this.model.gameFinishedProperty().get()){
                             this.model.onBeginTurn();
                             this.playerShape.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(this.model.getActivePlayer().getUrlShape()))));
@@ -97,6 +105,6 @@ public class GameController {
             }
         });
         this.playerTurnLabel.textProperty().bind(Bindings.concat("Au tour du joueur ", this.model.playerTurnProperty()));
-        this.model.getPlayer().chooseCase(cases);
+        this.model.getPlayer().chooseCase(plate);
     }
 }

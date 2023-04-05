@@ -1,8 +1,12 @@
 package com.morpiong.model.Player;
 
 import com.morpiong.model.Case;
+import com.morpiong.model.Plate;
 import com.morpiong.model.visitor.*;
+import com.morpiong.view.CasePane;
+import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 
 /**
  * Cette classe représente la stratégie d'un joueur humain dans le jeu.
@@ -19,18 +23,30 @@ public class PlayerStrategy extends PlayableStrategy {
     }
 
     /**
-     * Permet au joueur de choisir une case en cliquant dessus.
-     * @param cases le tableau des cases du plateau de jeu.
+     * Choisit une case non sélectionnée parmi toutes les cases fournies et la sélectionne.
+     *
+     * @param plate le plateau du jeu
      */
     @Override
-    public void chooseCase(Case[][] cases) {
+    public void chooseCase(Plate plate) {
+        Case[][] cases = plate.getCases();
+        GridPane platePane = (GridPane) plate.getPlatePane();
         for(Case[] rowCase: cases) {
             for (Case simpleCase : rowCase) {
-                simpleCase.getPane().setOnMouseClicked((MouseEvent event) ->{
-                    if(!simpleCase.selectionnedProperty().get()){
-                        simpleCase.accept(new SelectCaseVisitor());
-                    }
-                });
+                int x = simpleCase.getXCoord();
+                int y = simpleCase.getYCoord();
+                Node node = platePane.getChildren().stream()
+                        .filter(n -> GridPane.getRowIndex(n) == x && GridPane.getColumnIndex(n) == y)
+                        .findFirst()
+                        .orElse(null);
+                if (node instanceof CasePane) {
+                    CasePane casePane = (CasePane) node;
+                    casePane.setOnMouseClicked(event -> {
+                        if (!simpleCase.selectionnedProperty().get()) {
+                            simpleCase.accept(new SelectCaseVisitor());
+                        }
+                    });
+                }
             }
         }
     }

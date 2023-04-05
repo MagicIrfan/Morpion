@@ -1,6 +1,7 @@
 package com.morpiong.model.Player;
 
 import com.morpiong.model.Case;
+import com.morpiong.model.Plate;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -25,9 +26,9 @@ public abstract class PlayableStrategy {
 
     /**
      * Méthode abstraite permettant de choisir une case dans le tableau de cases donné.
-     * @param cases le tableau de cases.
+     * @param plate le plateau du jeu
      */
-    abstract public void chooseCase(Case[][] cases);
+    abstract public void chooseCase(Plate plate);
 
     /**
      * Retourne la propriété de l'URL de l'image représentant la future case cliquée

@@ -9,17 +9,20 @@ import javafx.scene.layout.Pane;
  */
 public class Case {
 
-    private final Pane casePane;
     private final BooleanProperty selectionned;
     private final StringProperty urlShapeImage;
     private boolean isPair;
+    private final int XCoord;
+    private final int YCoord;
 
     /**
      Constructeur de la classe Case.
-     @param pane le Pane représentant la case.
+     @param XCoord coordonnée X de la case
+     @param YCoord coordonnée Y de la case
      */
-    public Case(Pane pane){
-        this.casePane = pane;
+    public Case(int XCoord, int YCoord){
+        this.XCoord = XCoord;
+        this.YCoord = YCoord;
         this.selectionned = new SimpleBooleanProperty(false);
         this.urlShapeImage = new SimpleStringProperty();
     }
@@ -57,14 +60,6 @@ public class Case {
     }
 
     /**
-     Retourne le Pane représentant la case.
-     @return le Pane représentant la case.
-     */
-    public Pane getPane(){
-        return this.casePane;
-    }
-
-    /**
      Accepte le visiteur donné en paramètre pour la visite de la case.
      @param visitor le visiteur à accepter.
      */
@@ -86,5 +81,21 @@ public class Case {
      */
     public boolean isPair(){
         return this.isPair;
+    }
+
+    /**
+     Retourne la coordonnée X de la case
+     @return la coordonnée X de la case
+     */
+    public int getXCoord(){
+        return this.XCoord;
+    }
+
+    /**
+     Retourne la coordonnée Y de la case
+     @return la coordonnée Y de la case
+     */
+    public int getYCoord(){
+        return this.YCoord;
     }
 }
