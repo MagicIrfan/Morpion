@@ -19,6 +19,8 @@ public class Main extends Application {
         Scene scene = new Scene(root);
         stage.setTitle("Morpion");
         stage.setScene(scene);
+        stage.setWidth(600);
+        stage.setHeight(600);
         stage.show();
         stage.setResizable(false);
     }

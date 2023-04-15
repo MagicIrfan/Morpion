@@ -1,12 +1,12 @@
 package com.morpiong.controller;
 
+import com.morpiong.model.Difficult;
 import com.morpiong.utils.SceneChangerUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
@@ -68,7 +68,7 @@ public class MainMenuController {
      */
     @FXML
     public void onPlayButton(ActionEvent actionEvent) throws IOException {
-        this.play(actionEvent,false,false);
+        this.playPlayervsPlayer(actionEvent);
     }
 
     /**
@@ -90,7 +90,7 @@ public class MainMenuController {
      */
     @FXML
     public void onPlayerVsBotButton(ActionEvent actionEvent) throws IOException {
-        this.play(actionEvent,false,true);
+        this.chooseDifficult(actionEvent,false,true);
     }
 
     /**
@@ -100,23 +100,32 @@ public class MainMenuController {
      */
     @FXML
     public void onPlayBotVsBotButton(ActionEvent actionEvent) throws IOException {
-        this.play(actionEvent,true,true);
+        this.chooseDifficult(actionEvent,true,true);
     }
 
     /**
      * Charge la vue du jeu et initialise le contrôleur de la vue du jeu avec les informations de la partie à jouer.
      * @param actionEvent l'événement de clic sur le bouton de lancement de la partie.
-     * @param isPlayerBot indique si la le joueur 1 est un ordinateur ou humain.
-     * @param isOpponentBot indique si la partie est jouée contre l'ordinateur ou contre un joueur humain.
      * @throws IOException si une erreur se produit lors du chargement de la vue du jeu.
      */
-    private void play(ActionEvent actionEvent, boolean isPlayerBot, boolean isOpponentBot) throws IOException {
+    private void playPlayervsPlayer(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/morpiong/game-view.fxml"));
         Parent root = loader.load();
         GameController controller = loader.getController();
-        controller.setPlayerIsBot(isPlayerBot);
-        controller.setOpponentIsBot(isOpponentBot);
+        controller.setPlayerIsBot(false);
+        controller.setOpponentIsBot(false);
+        controller.setDifficult(Difficult.NONE);
         controller.initialize();
+        Pane pane = (Pane) ((Node) actionEvent.getSource()).getParent();
+        SceneChangerUtils.getInstance().changeScene(pane, root);
+    }
+
+    private void chooseDifficult(ActionEvent actionEvent, boolean isPlayerBot, boolean isOpponentBot) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/morpiong/choosedifficult-view.fxml"));
+        Parent root = loader.load();
+        ChooseDifficultController controller = loader.getController();
+        controller.setPlayerBot(isPlayerBot);
+        controller.setOpponentBot(isOpponentBot);
         Pane pane = (Pane) ((Node) actionEvent.getSource()).getParent();
         SceneChangerUtils.getInstance().changeScene(pane, root);
     }

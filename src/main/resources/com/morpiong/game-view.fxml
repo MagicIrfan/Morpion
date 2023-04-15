@@ -9,7 +9,7 @@
    <children>
       <ImageView fx:id="playerShape" fitHeight="92.0" fitWidth="100.0" layoutX="458.0" layoutY="42.0" pickOnBounds="true" preserveRatio="true" />
       <!--<AnchorPane fx:id="platePane" layoutY="159.0" prefHeight="600.0" prefWidth="614.0" />-->
-      <Label fx:id="playerTurnLabel" layoutX="86.0" layoutY="68.0" prefHeight="41.0" prefWidth="320.0" text="Au tour du joueur">
+      <Label fx:id="playerTurnLabel" layoutX="39.0" layoutY="42.0" prefHeight="41.0" prefWidth="320.0" text="Au tour du joueur">
          <font>
             <Font name="Calibri" size="36.0" />
          </font>

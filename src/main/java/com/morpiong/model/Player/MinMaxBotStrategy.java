@@ -1,6 +1,7 @@
 package com.morpiong.model.Player;
 
 import com.morpiong.model.Case;
+import com.morpiong.model.Factory.CaseFactory;
 import com.morpiong.model.GameModel;
 import com.morpiong.model.Plate;
 import com.morpiong.model.visitor.SelectCaseVisitor;
@@ -40,7 +41,6 @@ public class MinMaxBotStrategy extends PlayableStrategy {
     @Override
     public void chooseCase(Plate plate) {
         Case[][] cases = plate.getCases();
-        PlayableStrategy currentPlayer = game.getActivePlayer();
 
         // Disable all other cases
         GridPane platePane = (GridPane) plate.getPlatePane();
@@ -62,7 +62,7 @@ public class MinMaxBotStrategy extends PlayableStrategy {
                 }
             });
             // Calculate the best move using the MinMax algorithm
-            int[] bestMove = minimax(2, true, currentPlayer, cases);
+            int[] bestMove = minimax(5, true, this, cases);
             int row = bestMove[0];
             int col = bestMove[1];
 
@@ -85,12 +85,12 @@ public class MinMaxBotStrategy extends PlayableStrategy {
      * Calcule le meilleur mouvement possible pour le joueur actuel en utilisant l'algorithme MinMax avec une profondeur maximale donnée.
      *
      * @param depth             la profondeur maximale de la recherche
-     * @param maximizingPlayer  indique si le joueur actuel est en train de maximiser ou de minimiser son score
+     * @param isMaximizingPlayer  indique si le joueur actuel est en train de maximiser ou de minimiser son score
      * @param activePlayer      le joueur actuel
      * @param cases             les cases du plateau de jeu
      * @return un tableau d'entiers contenant la ligne et la colonne du meilleur mouvement
      */
-    private int[] minimax(int depth, boolean maximizingPlayer, PlayableStrategy activePlayer, Case[][] cases) {
+    private int[] minimax(int depth, boolean isMaximizingPlayer, PlayableStrategy activePlayer, Case[][] cases) {
         // Check if the game is over or the maximum depth has been reached
         if (game.gameFinishedProperty().get() || depth == 0) {
             return new int[]{0, 0, getScore(cases, activePlayer)};
@@ -102,17 +102,25 @@ public class MinMaxBotStrategy extends PlayableStrategy {
             int row = move[0];
             int col = move[1];
 
-            int[] score = minimax(depth - 1, !maximizingPlayer, activePlayer, cases);
+            Case[][] newCases = cloneCases(cases);
+            newCases[row][col].setSymbol(activePlayer.getSymbol());
+
+            PlayableStrategy nextPlayer = getNextPlayer(activePlayer);
+            int[] score = minimax(depth - 1, !isMaximizingPlayer, nextPlayer, newCases);
 
             // Update the best move if necessary
             if (bestMove == null ||
-                    (maximizingPlayer && score[2] > bestMove[2]) ||
-                    (!maximizingPlayer && score[2] < bestMove[2])) {
+                    (isMaximizingPlayer && score[2] > bestMove[2]) ||
+                    (!isMaximizingPlayer && score[2] < bestMove[2])) {
                 bestMove = new int[]{row, col, score[2]};
             }
         }
 
         return bestMove;
+    }
+
+    private PlayableStrategy getNextPlayer(PlayableStrategy player) {
+        return player == this ? game.getOpponent() : game.getPlayer();
     }
 
     /**
@@ -153,7 +161,7 @@ public class MinMaxBotStrategy extends PlayableStrategy {
                 }
             }
             if (isLineComplete) {
-                score++;
+                score += 1;
             }
         }
 
@@ -167,29 +175,28 @@ public class MinMaxBotStrategy extends PlayableStrategy {
                 }
             }
             if (isLineComplete) {
-                score++;
+                score += 1;
             }
         }
 
         // Check for diagonal lines
-        boolean isDiagonalComplete1 = true;
-        boolean isDiagonalComplete2 = true;
-        for (int i = 0; i < 3; i++) {
-            if (cases[i][i].getSymbol() != player.getSymbol()) {
-                isDiagonalComplete1 = false;
-            }
-            if (cases[i][2-i].getSymbol() != player.getSymbol()) {
-                isDiagonalComplete2 = false;
-            }
+        if (cases[0][0].getSymbol() == player.getSymbol() && cases[1][1].getSymbol() == player.getSymbol() && cases[2][2].getSymbol() == player.getSymbol()) {
+            score += 1;
         }
-        if (isDiagonalComplete1) {
-            score++;
-        }
-        if (isDiagonalComplete2) {
-            score++;
+        if (cases[2][0].getSymbol() == player.getSymbol() && cases[1][1].getSymbol() == player.getSymbol() && cases[0][2].getSymbol() == player.getSymbol()) {
+            score += 1;
         }
 
         return score;
+    }
+
+    private Case[][] cloneCases(Case[][] cases){
+        int MAX_SIZE = 3;
+        Case[][] clonedCases = new Case[MAX_SIZE][MAX_SIZE];
+        for (int index = 0; index < MAX_SIZE; index++) {
+            System.arraycopy(cases[index], 0, clonedCases[index], 0, MAX_SIZE);
+        }
+        return clonedCases;
     }
 }
 

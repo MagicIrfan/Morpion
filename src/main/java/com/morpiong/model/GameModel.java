@@ -288,7 +288,7 @@ public class GameModel {
                     .filter(n -> GridPane.getRowIndex(n) == x && GridPane.getColumnIndex(n) == y)
                     .findFirst()
                     .orElse(null);
-            ((CasePane)node).setBackground(new Background(new BackgroundFill(Color.ORANGE, null, null)));
+            ((CasePane)node).setBackground(new Background(new BackgroundFill(Color.BLACK, null, null)));
         }
     }
 

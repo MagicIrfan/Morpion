@@ -1,15 +1,9 @@
 /* Style pour le fond de l'AnchorPane */
-#mainMenuPane {
+#mainMenuPane, #chooseDifficultPane {
     -fx-background-image: url('../images/fond.png');
     -fx-background-size: cover;
     -fx-background-color: rgba(255, 255, 0, 0.5); /* Jaune semi-transparent */
 }
 #optionsPane{
     -fx-background-color: rgba(0,0,0,1); /* Jaune semi-transparent */
-}
-/* Style pour le titre */
-#titleLabel {
-    -fx-font-family: "Source Sans Pro", cursive, sans-serif;
-    -fx-font-size: 43px;
-    -fx-text-fill: #FFFFFF;
 }

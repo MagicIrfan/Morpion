@@ -1,5 +1,6 @@
 package com.morpiong.controller;
 
+import com.morpiong.model.Difficult;
 import com.morpiong.model.GameModel;
 import com.morpiong.model.Plate;
 import com.morpiong.model.Player.*;
@@ -32,6 +33,7 @@ public class GameController {
     private boolean playerIsBot;
     private boolean opponentIsBot;
     private Plate plate;
+    private Difficult difficult;
 
     /**
      * Initialise la vue principale du jeu.
@@ -48,8 +50,8 @@ public class GameController {
         root.setLayoutY(159);
         gamePane.getChildren().add(root);
         this.model = new GameModel(plate);
-        this.model.setPlayerStrategy(playerIsBot ? new MinMaxBotStrategy(Symbol.O,this.model) : new PlayerStrategy(Symbol.O));
-        this.model.setOpponentStrategy(opponentIsBot ? new MinMaxBotStrategy(Symbol.X,this.model) : new PlayerStrategy(Symbol.X));
+        this.model.setPlayerStrategy(playerIsBot ? (difficult == Difficult.EASY ? new BotStrategy(Symbol.O) : new MinMaxBotStrategy(Symbol.O,this.model)) : new PlayerStrategy(Symbol.O));
+        this.model.setOpponentStrategy(opponentIsBot ? (difficult == Difficult.EASY ? new BotStrategy(Symbol.X) : new MinMaxBotStrategy(Symbol.X,this.model)) : new PlayerStrategy(Symbol.X));
         this.playerShape.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(this.model.getPlayer().getUrlShape()))));
         this.createBindings();
     }
@@ -71,6 +73,13 @@ public class GameController {
     public void setOpponentIsBot(boolean isBot) {
         this.opponentIsBot = isBot;
     }
+
+    /**
+     * Change la difficulté du jeu
+     *
+     * @param difficult la difficulté du jeu
+     */
+    public void setDifficult(Difficult difficult){ this.difficult = difficult; }
 
     /**
      * Crée les bindings pour les cases du plateau de jeu.
