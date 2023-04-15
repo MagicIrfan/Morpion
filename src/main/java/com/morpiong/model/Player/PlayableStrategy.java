@@ -1,7 +1,8 @@
 package com.morpiong.model.Player;
 
-import com.morpiong.model.Case;
 import com.morpiong.model.Plate;
+import com.morpiong.model.Symbol;
+import com.morpiong.utils.ImageUtils;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -16,12 +17,21 @@ public abstract class PlayableStrategy {
      */
     protected final StringProperty urlShapeImage;
 
+    protected final Symbol symbol;
+
     /**
      * Constructeur de la classe PlayableStrategy.
-     * @param urlShapeImage l'URL de l'image représentant la future case cliquée.
      */
-    protected PlayableStrategy(String urlShapeImage) {
-        this.urlShapeImage = new SimpleStringProperty(urlShapeImage);
+    protected PlayableStrategy(Symbol symbol) {
+        this.symbol = symbol;
+        this.urlShapeImage = new SimpleStringProperty();
+        if(this.symbol == Symbol.X){
+            this.urlShapeImage.set(ImageUtils.X);
+        }
+        else if (this.symbol == Symbol.O){
+            this.urlShapeImage.set(ImageUtils.O);
+        }
+
     }
 
     /**
@@ -45,5 +55,9 @@ public abstract class PlayableStrategy {
      */
     public String getUrlShape(){
         return this.urlShapeImage.get();
+    }
+
+    public Symbol getSymbol(){
+        return this.symbol;
     }
 }

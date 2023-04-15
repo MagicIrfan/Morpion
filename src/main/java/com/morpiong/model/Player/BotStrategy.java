@@ -3,6 +3,7 @@ package com.morpiong.model.Player;
 import com.morpiong.model.Case;
 import com.morpiong.model.Plate;
 import com.morpiong.model.visitor.SelectCaseVisitor;
+import com.morpiong.model.Symbol;
 import com.morpiong.view.CasePane;
 import javafx.application.Platform;
 import javafx.scene.Node;
@@ -18,10 +19,9 @@ public class BotStrategy extends PlayableStrategy {
     /**
      * Crée une nouvelle instance de {@code BotStrategy} avec l'image de forme spécifiée.
      *
-     * @param urlImageShape l'URL de l'image de forme à utiliser
      */
-    public BotStrategy(String urlImageShape){
-        super(urlImageShape);
+    public BotStrategy(Symbol symbol){
+        super(symbol);
     }
 
     /**
@@ -33,9 +33,10 @@ public class BotStrategy extends PlayableStrategy {
     public void chooseCase(Plate plate) {
         Case[][] cases = plate.getCases();
         GridPane platePane = (GridPane) plate.getPlatePane();
+        // wait for one second
         botThread = new Thread(() -> {
             Platform.runLater(() -> {
-                for(Case[] rowCase: cases) {
+                for (Case[] rowCase : cases) {
                     for (Case simpleCase : rowCase) {
                         int x = simpleCase.getXCoord();
                         int y = simpleCase.getYCoord();

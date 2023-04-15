@@ -2,11 +2,9 @@ package com.morpiong.controller;
 
 import com.morpiong.model.GameModel;
 import com.morpiong.model.Plate;
-import com.morpiong.model.Player.BotStrategy;
-import com.morpiong.model.Player.PlayerStrategy;
-import com.morpiong.utils.ImageUtils;
+import com.morpiong.model.Player.*;
+import com.morpiong.model.Symbol;
 import com.morpiong.model.Case;
-import com.morpiong.view.CasePane;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -50,8 +48,8 @@ public class GameController {
         root.setLayoutY(159);
         gamePane.getChildren().add(root);
         this.model = new GameModel(plate);
-        this.model.setPlayerStrategy(playerIsBot ? new BotStrategy(ImageUtils.O) : new PlayerStrategy(ImageUtils.O));
-        this.model.setOpponentStrategy(opponentIsBot ? new BotStrategy(ImageUtils.X) : new PlayerStrategy(ImageUtils.X));
+        this.model.setPlayerStrategy(playerIsBot ? new MinMaxBotStrategy(Symbol.O,this.model) : new PlayerStrategy(Symbol.O));
+        this.model.setOpponentStrategy(opponentIsBot ? new MinMaxBotStrategy(Symbol.X,this.model) : new PlayerStrategy(Symbol.X));
         this.playerShape.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(this.model.getPlayer().getUrlShape()))));
         this.createBindings();
     }

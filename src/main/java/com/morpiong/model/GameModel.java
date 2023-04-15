@@ -136,7 +136,7 @@ public class GameModel {
                 if (!plate.getCases()[i][j].isSelectionned()) {
                     allSelected = false;
                 }
-                if (plate.getCases()[i][j].isPair()) {
+                if (plate.getCases()[i][j].getSymbol() == Symbol.O) {
                     allUnpair = false;
                 } else {
                     allPair = false;
@@ -167,7 +167,7 @@ public class GameModel {
                 if (!plate.getCases()[j][i].isSelectionned()) {
                     allSelected = false;
                 }
-                if (plate.getCases()[j][i].isPair()) {
+                if (plate.getCases()[j][i].getSymbol() == Symbol.O) {
                     allUnpair = false;
                 } else {
                     allPair = false;
@@ -200,7 +200,7 @@ public class GameModel {
             if (!plate.getCases()[i][i].isSelectionned()) {
                 allSelected = false;
             }
-            if (plate.getCases()[i][i].isPair()) {
+            if (plate.getCases()[i][i].getSymbol() == Symbol.O) {
                 allUnpair = false;
             } else {
                 allPair = false;
@@ -220,7 +220,7 @@ public class GameModel {
             if (!plate.getCases()[i][2 - i].isSelectionned()) {
                 allSelected = false;
             }
-            if (plate.getCases()[i][2 - i].isPair()) {
+            if (plate.getCases()[i][2 - i].getSymbol() == Symbol.O) {
                 allUnpair = false;
             } else {
                 allPair = false;
@@ -299,7 +299,7 @@ public class GameModel {
      */
     public void onTurnFinished(Case simpleCase,Pane casePane){
         // Définir la paire pour le joueur en cours
-        simpleCase.setPair(this.getNbMoves() % 2 == 0);
+        simpleCase.setSymbol(this.getActivePlayer().getSymbol());
         // Afficher le coup sur le plateau
         simpleCase.accept(new DrawCaseVisitor(this.getActivePlayer().getUrlShape(),casePane));
         // Vérifier si la partie est terminée

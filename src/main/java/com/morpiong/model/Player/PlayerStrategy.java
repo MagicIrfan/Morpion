@@ -2,10 +2,10 @@ package com.morpiong.model.Player;
 
 import com.morpiong.model.Case;
 import com.morpiong.model.Plate;
+import com.morpiong.model.Symbol;
 import com.morpiong.model.visitor.*;
 import com.morpiong.view.CasePane;
 import javafx.scene.Node;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 
 /**
@@ -16,10 +16,9 @@ public class PlayerStrategy extends PlayableStrategy {
 
     /**
      * Constructeur de la classe PlayerStrategy.
-     * @param urlImageShape l'URL de l'image de la forme du joueur.
      */
-    public PlayerStrategy(String urlImageShape){
-        super(urlImageShape);
+    public PlayerStrategy(Symbol symbol){
+        super(symbol);
     }
 
     /**

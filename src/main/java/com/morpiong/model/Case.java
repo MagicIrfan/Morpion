@@ -1,7 +1,6 @@
 package com.morpiong.model;
 import com.morpiong.model.visitor.*;
 import javafx.beans.property.*;
-import javafx.scene.layout.Pane;
 
 /**
 
@@ -11,7 +10,7 @@ public class Case {
 
     private final BooleanProperty selectionned;
     private final StringProperty urlShapeImage;
-    private boolean isPair;
+    private Symbol symbol;
     private final int XCoord;
     private final int YCoord;
 
@@ -67,20 +66,12 @@ public class Case {
         visitor.visit(this);
     }
 
-    /**
-     Définit si la case est paire ou impaire.
-     @param isPair vrai si la case est paire, faux sinon.
-     */
-    public void setPair(boolean isPair){
-        this.isPair = isPair;
+    public void setSymbol(Symbol symbol){
+        this.symbol = symbol;
     }
 
-    /**
-     Retourne vrai si la case est paire.
-     @return vrai si la case est paire.
-     */
-    public boolean isPair(){
-        return this.isPair;
+    public Symbol getSymbol(){
+        return this.symbol;
     }
 
     /**
