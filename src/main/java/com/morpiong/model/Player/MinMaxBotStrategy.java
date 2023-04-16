@@ -40,12 +40,34 @@ public class MinMaxBotStrategy extends BotStrategy {
     public void chooseCase(Plate plate) {
         Case[][] cases = plate.getCases();
 
+        boolean plateEmpty = true;
+        for (int i = 0; i < cases.length; i++) {
+            for (int j = 0; j < cases[0].length; j++) {
+                if (cases[i][j].getSymbol() != Symbol.NONE) {
+                    plateEmpty = false;
+                    break;
+                }
+            }
+            if (!plateEmpty) {
+                break;
+            }
+        }
+
+        boolean finalPlateEmpty = plateEmpty;
         botThread = new Thread(() -> {
             initialiseBotThread(plate);
-            // Calculate the best move using the MinMax algorithm
-            int[] bestMove = minimax(100, true, game.getPlayer(), cases,Integer.MIN_VALUE,Integer.MAX_VALUE);
-            int row = bestMove[0];
-            int col = bestMove[1];
+            int row = 0;
+            int col = 0;
+            if (finalPlateEmpty) {
+                // If the plate is empty, choose a random case
+                row = (int) (Math.random() * 3);
+                col = (int) (Math.random() * 3);
+            } else {
+                // Calculate the best move using the MinMax algorithm
+                int[] bestMove = minimax(50, true, game.getPlayer(), cases, Integer.MIN_VALUE, Integer.MAX_VALUE);
+                row = bestMove[0];
+                col = bestMove[1];
+            }
 
             try {
                 Thread.sleep(1000); // wait for one second
@@ -134,7 +156,7 @@ public class MinMaxBotStrategy extends BotStrategy {
      */
     private int evaluateMove(int row, int col, PlayableStrategy activePlayer, Case[][] cases) {
         // Check if the move leads to a win
-        if (isWinningMove(row, col, activePlayer,cases)) {
+        if (isWinningMove(row, col, activePlayer, cases)) {
             return Integer.MAX_VALUE;
         }
 
@@ -146,8 +168,10 @@ public class MinMaxBotStrategy extends BotStrategy {
 
         // Evaluate the move based on the number of open lines it creates
         int openLines = 0;
-        int diagonalWeight = 1;
-        int centerWeight = 1;
+        int diagonalWeight = 2;
+        int centerWeight = 2;
+
+        // Count the number of open lines in the row and column where the move was made
         for (int i = 0; i < 3; i++) {
             if (cases[row][i].isEmpty()) {
                 openLines++;
@@ -168,15 +192,32 @@ public class MinMaxBotStrategy extends BotStrategy {
                 }
             }
         }
-        if (row == col && cases[0][0].isEmpty() && cases[1][1].isEmpty() && cases[2][2].isEmpty()) {
-            openLines += 2 * diagonalWeight;
+
+        // Count the number of open lines in the two diagonals if the move is on a diagonal
+        if (row == col) {
+            if (cases[0][0].isEmpty() && cases[1][1].isEmpty() && cases[2][2].isEmpty()) {
+                openLines += 2 * diagonalWeight;
+                centerWeight += 2;
+            }
+        }
+        if (row + col == 2) {
+            if (cases[0][2].isEmpty() && cases[1][1].isEmpty() && cases[2][0].isEmpty()) {
+                openLines += 2 * diagonalWeight;
+                centerWeight += 2;
+            }
+        }
+
+        // Give a bonus for making a move in the center of the board
+        if (row == 1 && col == 1) {
             centerWeight += 2;
         }
-        if (row + col == 2 && cases[0][2].isEmpty() && cases[1][1].isEmpty() && cases[2][0].isEmpty()) {
-            openLines += 2 * diagonalWeight;
-            centerWeight += 2;
+
+        // Give a bonus for making a move on the edge of the board
+        if ((row == 0 || row == 2) && (col == 0 || col == 2)) {
+            centerWeight += 1;
         }
-        return openLines * centerWeight * activePlayer.getSign();
+
+        return openLines * centerWeight;
     }
 
     /**

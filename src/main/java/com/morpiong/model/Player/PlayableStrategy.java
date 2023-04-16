@@ -64,13 +64,4 @@ public abstract class PlayableStrategy {
     public Symbol getSymbol(){
         return this.symbol;
     }
-
-    /**
-     * Renvoie le signe correspondant à chaque joueur.
-     *
-     * @return le signe correspondant au joueur
-     */
-    protected int getSign() {
-        return this.symbol == Symbol.O ? 1 : -1;
-    }
 }
