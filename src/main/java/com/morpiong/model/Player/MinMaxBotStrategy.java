@@ -43,10 +43,9 @@ public class MinMaxBotStrategy extends BotStrategy {
         botThread = new Thread(() -> {
             initialiseBotThread(plate);
             // Calculate the best move using the MinMax algorithm
-            int[] bestMove = minimax(35, true, this, cases,Integer.MIN_VALUE,Integer.MAX_VALUE);
+            int[] bestMove = minimax(100, true, game.getPlayer(), cases,Integer.MIN_VALUE,Integer.MAX_VALUE);
             int row = bestMove[0];
             int col = bestMove[1];
-            System.out.println(bestMove[0] + " " + bestMove[1]);
 
             try {
                 Thread.sleep(1000); // wait for one second
@@ -114,10 +113,9 @@ public class MinMaxBotStrategy extends BotStrategy {
 
             // Update the best move and score if necessary
             if (isMaximizingPlayer && nextMove[2] > bestMove[2] || !isMaximizingPlayer && nextMove[2] < bestMove[2]) {
-                bestMove = new int[]{row, col, nextMove[2]};
+                bestMove = new int[]{nextMove[0], nextMove[1], nextMove[2]};
             }
         }
-
         // Return the best move
         return bestMove;
     }
@@ -125,7 +123,8 @@ public class MinMaxBotStrategy extends BotStrategy {
     /**
      * Évalue un coup en fonction de son potentiel de victoire pour le joueur actif et du potentiel de victoire
      * de l'adversaire. Le coup est évalué en fonction du nombre de lignes ouvertes qu'il crée, avec un poids supplémentaire
-     * pour les diagonales. Si le coup est gagnant, renvoie Integer.MAX_VALUE. Si le coup est perdant, renvoie Integer.MIN_VALUE.
+     * pour les diagonales et le centre du plateau. Si le coup est gagnant, renvoie Integer.MAX_VALUE. Si le coup est perdant,
+     * renvoie Integer.MIN_VALUE.
      *
      * @param row          la ligne du coup
      * @param col          la colonne du coup
@@ -135,7 +134,7 @@ public class MinMaxBotStrategy extends BotStrategy {
      */
     private int evaluateMove(int row, int col, PlayableStrategy activePlayer, Case[][] cases) {
         // Check if the move leads to a win
-        if (isWinningMove(row, col, activePlayer, cases)) {
+        if (isWinningMove(row, col, activePlayer,cases)) {
             return Integer.MAX_VALUE;
         }
 
@@ -148,11 +147,15 @@ public class MinMaxBotStrategy extends BotStrategy {
         // Evaluate the move based on the number of open lines it creates
         int openLines = 0;
         int diagonalWeight = 1;
+        int centerWeight = 1;
         for (int i = 0; i < 3; i++) {
             if (cases[row][i].isEmpty()) {
                 openLines++;
                 if ((row == i && row == col) || (row + col == 2 && i == 2)) {
                     diagonalWeight++;
+                }
+                if (i == 1 && col == 1) {
+                    centerWeight += 2;
                 }
             }
             if (cases[i][col].isEmpty()) {
@@ -160,15 +163,20 @@ public class MinMaxBotStrategy extends BotStrategy {
                 if ((row == i && row == col) || (row + col == 2 && i == 0)) {
                     diagonalWeight++;
                 }
+                if (i == 1 && row == 1) {
+                    centerWeight += 2;
+                }
             }
         }
         if (row == col && cases[0][0].isEmpty() && cases[1][1].isEmpty() && cases[2][2].isEmpty()) {
             openLines += 2 * diagonalWeight;
+            centerWeight += 2;
         }
         if (row + col == 2 && cases[0][2].isEmpty() && cases[1][1].isEmpty() && cases[2][0].isEmpty()) {
             openLines += 2 * diagonalWeight;
+            centerWeight += 2;
         }
-        return openLines;
+        return openLines * centerWeight * activePlayer.getSign();
     }
 
     /**
@@ -187,28 +195,40 @@ public class MinMaxBotStrategy extends BotStrategy {
         Symbol symbol = player.getSymbol();
 
         // Vérifie la ligne
-        count = countMatchingSymbols(cases[row], symbol);
+        for (int i = 0; i < size; i++) {
+            if (cases[row][i].getSymbol() == symbol) {
+                count++;
+            } else {
+                break;
+            }
+        }
         if (count >= size) {
             return true;
         }
 
         // Vérifie la colonne
-        Case[] column = new Case[size];
+        count = 0;
         for (int i = 0; i < size; i++) {
-            column[i] = cases[i][col];
+            if (cases[i][col].getSymbol() == symbol) {
+                count++;
+            } else {
+                break;
+            }
         }
-        count = countMatchingSymbols(column, symbol);
         if (count >= size) {
             return true;
         }
 
         // Vérifie la diagonale principale si le coup est dessus
         if (row == col) {
-            Case[] diagonal = new Case[size];
+            count = 0;
             for (int i = 0; i < size; i++) {
-                diagonal[i] = cases[i][i];
+                if (cases[i][i].getSymbol() == symbol) {
+                    count++;
+                } else {
+                    break;
+                }
             }
-            count = countMatchingSymbols(diagonal, symbol);
             if (count >= size) {
                 return true;
             }
@@ -216,11 +236,14 @@ public class MinMaxBotStrategy extends BotStrategy {
 
         // Vérifie la diagonale secondaire si le coup est dessus
         if (row == size - 1 - col) {
-            Case[] diagonal = new Case[size];
+            count = 0;
             for (int i = 0; i < size; i++) {
-                diagonal[i] = cases[i][size - 1 - i];
+                if (cases[i][size - 1 - i].getSymbol() == symbol) {
+                    count++;
+                } else {
+                    break;
+                }
             }
-            count = countMatchingSymbols(diagonal, symbol);
             if (count >= size) {
                 return true;
             }
@@ -231,31 +254,12 @@ public class MinMaxBotStrategy extends BotStrategy {
 
     /**
 
-     Compte le nombre de cases contenant un symbole donné dans un tableau de cases.
-     @param cases tableau de cases à évaluer
-     @param symbol symbole à rechercher
-     @return le nombre de cases contenant le symbole
-     */
-    private int countMatchingSymbols(Case[] cases, Symbol symbol) {
-        int count = 0;
-        for (Case aCase : cases) {
-            if (aCase.getSymbol() == symbol) {
-                count++;
-            } else {
-                break;
-            }
-        }
-        return count;
-    }
-
-    /**
-
      Renvoie le joueur suivant dans la partie, en fonction du joueur actuel.
      @param player le joueur actuel
      @return le joueur suivant
      */
     private PlayableStrategy getNextPlayer(PlayableStrategy player) {
-        return player == this ? game.getOpponent() : this;
+        return player.getSymbol() == Symbol.O ? game.getOpponent() : game.getPlayer();
     }
 
     /**
