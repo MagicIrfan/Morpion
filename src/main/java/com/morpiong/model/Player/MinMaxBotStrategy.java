@@ -70,6 +70,7 @@ public class MinMaxBotStrategy extends PlayableStrategy {
                 Thread.sleep(1000); // wait for one second
             } catch (InterruptedException e) {
                 e.printStackTrace();
+                Thread.currentThread().interrupt();
             }
             // Select the chosen case
             Case caseToChoose = cases[row][col];
