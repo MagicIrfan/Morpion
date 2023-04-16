@@ -62,7 +62,6 @@ public class BotStrategy extends PlayableStrategy {
             try {
                 Thread.sleep(1000); // wait for one second
             } catch (InterruptedException e) {
-                e.printStackTrace();
                 Thread.currentThread().interrupt();
             }
             Case finalCaseToChoose = caseToChoose;
