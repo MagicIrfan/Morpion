@@ -50,8 +50,8 @@ public class GameController {
         root.setLayoutY(159);
         gamePane.getChildren().add(root);
         this.model = new GameModel(plate);
-        this.model.setPlayerStrategy(playerIsBot ? (difficult == Difficult.EASY ? new BotStrategy(Symbol.O) : new MinMaxBotStrategy(Symbol.O,this.model)) : new PlayerStrategy(Symbol.O));
-        this.model.setOpponentStrategy(opponentIsBot ? (difficult == Difficult.EASY ? new BotStrategy(Symbol.X) : new MinMaxBotStrategy(Symbol.X,this.model)) : new PlayerStrategy(Symbol.X));
+        this.model.setPlayerStrategy(playerIsBot ? (difficult == Difficult.EASY ? new NaiveBotStrategy(Symbol.O) : new MinMaxBotStrategy(Symbol.O,this.model)) : new PlayerStrategy(Symbol.O));
+        this.model.setOpponentStrategy(opponentIsBot ? (difficult == Difficult.EASY ? new NaiveBotStrategy(Symbol.X) : new MinMaxBotStrategy(Symbol.X,this.model)) : new PlayerStrategy(Symbol.X));
         this.playerShape.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(this.model.getPlayer().getUrlShape()))));
         this.createBindings();
     }

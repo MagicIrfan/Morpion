@@ -16,11 +16,9 @@ import java.util.*;
 /**
  * Une stratégie de jeu implémentant un joueur bot qui choisit une case non sélectionnée grâce à l'algorithme MinMax.
  */
-public class MinMaxBotStrategy extends PlayableStrategy {
+public class MinMaxBotStrategy extends BotStrategy {
 
     private final GameModel game;
-
-    private Thread botThread;
 
     /**
      * Crée une nouvelle instance de {@code MinMaxBotStrategy} avec l'image de forme spécifiée et le modèle de jeu.
@@ -42,25 +40,8 @@ public class MinMaxBotStrategy extends PlayableStrategy {
     public void chooseCase(Plate plate) {
         Case[][] cases = plate.getCases();
 
-        // Disable all other cases
-        GridPane platePane = (GridPane) plate.getPlatePane();
         botThread = new Thread(() -> {
-            Platform.runLater(() -> {
-                for (Case[] rowCase : cases) {
-                    for (Case simpleCase : rowCase) {
-                        int x = simpleCase.getXCoord();
-                        int y = simpleCase.getYCoord();
-                        Node node = platePane.getChildren().stream()
-                                .filter(n -> GridPane.getRowIndex(n) == x && GridPane.getColumnIndex(n) == y)
-                                .findFirst()
-                                .orElse(null);
-                        if (node instanceof CasePane) {
-                            CasePane casePane = (CasePane) node;
-                            casePane.setOnMouseClicked(null);
-                        }
-                    }
-                }
-            });
+            initialiseBotThread(plate);
             // Calculate the best move using the MinMax algorithm
             int[] bestMove = minimax(5, true, this, cases);
             int row = bestMove[0];
