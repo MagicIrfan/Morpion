@@ -40,17 +40,10 @@ public class MinMaxBotStrategy extends BotStrategy {
     public void chooseCase(Plate plate) {
         Case[][] cases = plate.getCases();
 
-        System.out.println("----------------------");
-        for(Case[] rowCase : cases){
-            for(Case casee : rowCase){
-                System.out.print("|" + casee.getSymbol()+"|");
-            }
-            System.out.println(" ");
-        }
         boolean plateEmpty = true;
-        for (int i = 0; i < cases.length; i++) {
+        for (Case[] aCase : cases) {
             for (int j = 0; j < cases[0].length; j++) {
-                if (cases[i][j].getSymbol() != Symbol.NONE) {
+                if (!aCase[j].isEmpty()) {
                     plateEmpty = false;
                     break;
                 }
@@ -71,7 +64,7 @@ public class MinMaxBotStrategy extends BotStrategy {
                 col = (int) (Math.random() * 3);
             } else {
                 // Calculate the best move using the MinMax algorithm
-                int[] bestMove = minimax(50, true, game.getPlayer(), cases, Integer.MIN_VALUE, Integer.MAX_VALUE);
+                int[] bestMove = minimax(6, true, game.getPlayer(), cases, Integer.MIN_VALUE, Integer.MAX_VALUE);
                 row = bestMove[0];
                 col = bestMove[1];
             }
@@ -103,7 +96,10 @@ public class MinMaxBotStrategy extends BotStrategy {
     private int[] minimax(int depth, boolean isMaximizingPlayer, PlayableStrategy activePlayer, Case[][] cases, int alpha, int beta) {
         // Check if the game is over or the maximum depth has been reached
         if (game.gameFinishedProperty().get() || depth == 0) {
-            return new int[]{0, 0, evaluateMove(0, 0, activePlayer, cases)};
+            Case randomCase = getRandomMove(cases);
+            int x = randomCase.getXCoord();
+            int y = randomCase.getYCoord();
+            return new int[]{x, y, evaluateMove(x, y, activePlayer, cases)};
         }
 
         int[] bestMove = null;

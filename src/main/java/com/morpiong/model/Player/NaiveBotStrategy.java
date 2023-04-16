@@ -32,22 +32,14 @@ public class NaiveBotStrategy extends BotStrategy {
         Case[][] cases = plate.getCases();
         botThread = new Thread(() -> {
             initialiseBotThread(plate);
-            Case caseToChoose = null;
-            while (caseToChoose == null) {
-                int randIndex = (int) (Math.random() * 3);
-                int randJIndex = (int) (Math.random() * 3);
-                if (!cases[randIndex][randJIndex].isSelectionned()) {
-                    caseToChoose = cases[randIndex][randJIndex];
-                }
-            }
+            Case caseToChoose = getRandomMove(cases);
             try {
                 Thread.sleep(1000); // wait for one second
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
-            Case finalCaseToChoose = caseToChoose;
             Platform.runLater(() -> {
-                finalCaseToChoose.accept(new SelectCaseVisitor());
+                caseToChoose.accept(new SelectCaseVisitor());
             });
         });
         botThread.start();

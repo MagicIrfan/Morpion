@@ -52,4 +52,22 @@ public abstract class BotStrategy extends PlayableStrategy {
             }
         });
     }
+
+    /**
+     * Renvoie une case aléatoire parmi celles disponibles dans le plateau de jeu.
+     *
+     * @param cases les cases du plateau de jeu
+     * @return une case aléatoire disponible
+     */
+    protected Case getRandomMove(Case[][] cases){
+        Case caseToChoose = null;
+        while (caseToChoose == null) {
+            int randIndex = (int) (Math.random() * 3);
+            int randJIndex = (int) (Math.random() * 3);
+            if (cases[randIndex][randJIndex].isEmpty()) {
+                caseToChoose = cases[randIndex][randJIndex];
+            }
+        }
+        return caseToChoose;
+    }
 }
