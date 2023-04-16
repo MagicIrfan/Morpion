@@ -24,6 +24,7 @@ public class Case {
         this.YCoord = YCoord;
         this.selectionned = new SimpleBooleanProperty(false);
         this.urlShapeImage = new SimpleStringProperty();
+        this.symbol = Symbol.NONE;
     }
 
     /**
@@ -66,10 +67,18 @@ public class Case {
         visitor.visit(this);
     }
 
+    /**
+     * Change le symbole de la case
+     * @param symbol le symbole de la case à changer
+     */
     public void setSymbol(Symbol symbol){
         this.symbol = symbol;
     }
 
+    /**
+     * Retourne le symbole de la case
+     * @return le symbole de la case
+     */
     public Symbol getSymbol(){
         return this.symbol;
     }
@@ -88,5 +97,13 @@ public class Case {
      */
     public int getYCoord(){
         return this.YCoord;
+    }
+
+    /**
+     * Permet de savoir si la case est vide
+     * @return un booléen permettant de savoir si la case est vide
+     */
+    public boolean isEmpty(){
+        return this.symbol == Symbol.NONE;
     }
 }

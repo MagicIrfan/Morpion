@@ -57,6 +57,10 @@ public abstract class PlayableStrategy {
         return this.urlShapeImage.get();
     }
 
+    /**
+     * Retourne le symbole du joueur
+     * @return le symbole du joueur
+     */
     public Symbol getSymbol(){
         return this.symbol;
     }

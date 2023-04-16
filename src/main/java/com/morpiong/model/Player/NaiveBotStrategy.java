@@ -15,8 +15,8 @@ import javafx.scene.layout.GridPane;
 public class NaiveBotStrategy extends BotStrategy {
 
     /**
-     * Crée une nouvelle instance de {@code BotStrategy} avec l'image de forme spécifiée.
-     *
+     * Crée une nouvelle instance de {@code NaiveBotStrategy} avec le symbole spécifié.
+     * @param symbol le symbole spécifié
      */
     public NaiveBotStrategy(Symbol symbol){
         super(symbol);
