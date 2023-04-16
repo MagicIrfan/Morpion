@@ -40,6 +40,13 @@ public class MinMaxBotStrategy extends BotStrategy {
     public void chooseCase(Plate plate) {
         Case[][] cases = plate.getCases();
 
+        System.out.println("----------------------");
+        for(Case[] rowCase : cases){
+            for(Case casee : rowCase){
+                System.out.print("|" + casee.getSymbol()+"|");
+            }
+            System.out.println(" ");
+        }
         boolean plateEmpty = true;
         for (int i = 0; i < cases.length; i++) {
             for (int j = 0; j < cases[0].length; j++) {
@@ -109,7 +116,7 @@ public class MinMaxBotStrategy extends BotStrategy {
 
             PlayableStrategy nextPlayer = getNextPlayer(activePlayer);
             score = evaluateMove(row, col, activePlayer, newCases);
-
+            newCases[row][col].setSymbol(Symbol.NONE);
             if (isMaximizingPlayer) {
                 int[] maxMove = new int[]{row, col, score};
                 if (bestMove == null || maxMove[2] > bestMove[2]) {
@@ -313,7 +320,7 @@ public class MinMaxBotStrategy extends BotStrategy {
         List<int[]> possibleMoves = new ArrayList<>();
         for (int i = 0; i < cases.length; i++) {
             for (int j = 0; j < cases[i].length; j++) {
-                if (!cases[i][j].isSelectionned()) {
+                if (cases[i][j].isEmpty()) {
                     possibleMoves.add(new int[]{i, j});
                 }
             }
