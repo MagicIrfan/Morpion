@@ -38,7 +38,7 @@ public abstract class PlayableStrategy {
      * Méthode abstraite permettant de choisir une case dans le tableau de cases donné.
      * @param plate le plateau du jeu
      */
-    abstract public void chooseCase(Plate plate);
+    public abstract void chooseCase(Plate plate);
 
     /**
      * Retourne la propriété de l'URL de l'image représentant la future case cliquée

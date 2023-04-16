@@ -9,6 +9,7 @@ import com.morpiong.view.CasePane;
  */
 public class CaseFactory{
 
+    private CaseFactory(){}
     /**
      * Crée une nouvelle instance de la classe Case.
      * @param XCoord la coordonnée X de la case
